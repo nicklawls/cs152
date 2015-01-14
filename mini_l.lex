@@ -5,11 +5,14 @@
 const char *reserved_words[] = {"and","array","beginloop","beginprogram","break","continue","do","else","elseif","endif","endloop","endprogram","exit","false","if","integer","not","of","or","program","read","then","true","while","write"};
 const char *reserved_tokens[] = {"AND","ARRAY","BEGINLOOP","BEGIN_PROGRAM","BREAK","CONTINUE","DO","ELSE","ELSEIF","ENDIF","ENDLOOP","END_PROGRAM","EXIT","FALSE","IF","INTEGER","NOT","OF","OR","PROGRAM","READ","THEN","TRUE","WHILE","WRITE",};
 size_t keywords = 25;
+int yycolumno = 0;
 %}
 
-COMMENT ##.*\n
+NEWLINE \n
 
-WHITESPACE " "*|[\t\n]*
+COMMENT ##.*
+
+WHITESPACE [ \t]
 
 ARITHMETIC [-+*/%]
 
@@ -27,11 +30,17 @@ SPECIAL [;:,?\[\]\(\)]|(:=)
 
 UNIDENTIFIED .
 
-INVALID_IDENT {DIGIT}{IDENTIFIER}|{IDENTIFIER}_+
+INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 %%
-{NUMBER} {printf("NUMBER %s\n", yytext);}
+{NEWLINE} {yycolumno = 0;}
+
+{NUMBER} {
+	yycolumno += yyleng;
+	printf("NUMBER %s\n", yytext);
+}
 
 {COMPARISON} {
+	yycolumno += yyleng;
 	if (!strcmp(yytext, "==") ) {
 		printf("EQ\n");
 	} else if (!strcmp(yytext, "<>") ) {
@@ -50,6 +59,7 @@ INVALID_IDENT {DIGIT}{IDENTIFIER}|{IDENTIFIER}_+
 }
 
 {ARITHMETIC} {
+	yycolumno += yyleng;
 	if (!strcmp(yytext, "-") ) {
 		printf("SUB\n");
 	} else if (!strcmp(yytext, "+") ) {
@@ -66,6 +76,7 @@ INVALID_IDENT {DIGIT}{IDENTIFIER}|{IDENTIFIER}_+
 }
 
 {SPECIAL} {
+	yycolumno += yyleng;
 	if (!strcmp(yytext, ";") ) {
 		printf("SEMICOLON\n");
 	} else if (!strcmp(yytext, ":") ) {
@@ -90,6 +101,7 @@ INVALID_IDENT {DIGIT}{IDENTIFIER}|{IDENTIFIER}_+
 }
 
 {IDENTIFIER} {
+	yycolumno += yyleng;
 	int i;
 	for (i = 0; i < keywords; i++) {
 		if (!strcmp(yytext, reserved_words[i])) {
@@ -106,11 +118,13 @@ INVALID_IDENT {DIGIT}{IDENTIFIER}|{IDENTIFIER}_+
 {COMMENT}|{WHITESPACE} /* consume whitespace and comments */
 
 {UNIDENTIFIED} {
-	printf("Invalid character \"%s\" on line %i\n", yytext, yylineno);
+	printf("Invalid character \"%s\" on line %i, column %i\n", yytext, yylineno, ++yycolumno);
+	exit(1);
 }
 
 {INVALID_IDENT} {
-	printf("Invalid identifier \"%s\" on line %i\n", yytext, yylineno);
+	printf("Invalid identifier \"%s\" on line %i, column %i\n", yytext, yylineno, ++yycolumno);
+	exit(1);
 }
 
 %%
