@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "y.tab.h"
 const char *reserved_words[] = {"and","array","beginloop","beginprogram","break","continue","do","else","elseif","endif","endloop","endprogram","exit","false","if","integer","not","of","or","program","read","then","true","while","write"};
-const char *reserved_tokens[] = {"AND","ARRAY","BEGINLOOP","BEGIN_PROGRAM","BREAK","CONTINUE","DO","ELSE","ELSEIF","ENDIF","ENDLOOP","END_PROGRAM","EXIT","FALSE","IF","INTEGER","NOT","OF","OR","PROGRAM","READ","THEN","TRUE","WHILE","WRITE",};
+yytokentype reserved_tokens[] = {AND,ARRAY,BEGINLOOP,BEGIN_PROGRAM,BREAK,CONTINUE,DO,ELSE,ELSEIF,ENDIF,ENDLOOP,END_PROGRAM,EXIT,FALSE,IF,INTEGER,NOT,OF,OR,PROGRAM,READ,THEN,TRUE,WHILE,WRITE};
 size_t keywords = 25;
 int yycolumno = 0;
 %}
@@ -20,7 +20,7 @@ ARITHMETIC [-+*/%]
 COMPARISON ==|<>|<|>|<=|>=
 
 DIGIT [0-9]
-
+`
 NUMBER [1-9]{DIGIT}*
 
 LETTER [A-Z]|[a-z]
@@ -137,12 +137,15 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 	int i;
 	for (i = 0; i < keywords; i++) {
 		if (!strcmp(yytext, reserved_words[i])) {
-			printf("%s\n", reserved_tokens[i]);
-			break;
+			// printf("%s\n", reserved_tokens[i]);
+			return reserved_tokens[i];
+			// break;
 		} 
 	} 
 	
 	if (i == keywords) {
+		yylval.stringval = yytext;
+		return IDENT;
 		printf("IDENT %s\n", yytext);
 	}
 }

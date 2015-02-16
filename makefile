@@ -8,7 +8,7 @@ push:
 	git push
 
 run: 
-	./lexer
+	./parser
 
 test: 
 	./test_lexer.sh
