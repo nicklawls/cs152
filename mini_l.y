@@ -10,7 +10,11 @@
 %union{
 	int intval;
     double floatval;
-	char* stringval;
+    
+    int* intarrayval
+    double* doublearrayval
+	
+    char* stringval;
 }
 
 
@@ -31,12 +35,14 @@
 
 
 %type <intval> expression
+%type <intval> var term
+
 /*
 %type <intval> bool_exp relation_and_exp relation_exp comp
 %type <stringval> block 
 %type <stringval> multiplicative_exp
 %type <stringval> program statement declaration
-%type <stringval> var term
+
 */
 
 %%
@@ -44,6 +50,12 @@
 input : expression {printf("input -> expression\n")};
 
 expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $1)} ;
+
+var : IDENT {$$ = $1; printf("var -> ident %s\n", $1);}
+    | IDENT L_BRACKET expression R_BRACKET {
+        $$ = $1; printf("var -> ident[expression] %s[%i]\n"); 
+    }
+    ;
 
 %%
 
