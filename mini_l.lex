@@ -44,20 +44,29 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {COMPARISON} {
 	yycolumno += yyleng;
+	yylval.stringval = yytext;
+
 	if (!strcmp(yytext, "==") ) {
 		printf("EQ\n");
+		return EQ;
 	} else if (!strcmp(yytext, "<>") ) {
 		printf("NEQ\n");
+		return NEQ;
 	} else if (!strcmp(yytext, ">") ) {
 		printf("GT\n");
+		return GT;
 	} else if (!strcmp(yytext, "<") ) {
 		printf("LT\n");
+		return LT;
 	} else if (!strcmp(yytext, "<=") ) {
 		printf("LTE\n");
+		return LTE;
 	} else if (!strcmp(yytext, ">=") ) {
 		printf("GTE\n");
+		return GTE;
 	} else {
 		printf("Invalid comparison operator\n");
+		exit(1);
 	}
 }
 
