@@ -72,18 +72,26 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {ARITHMETIC} {
 	yycolumno += yyleng;
+	yylval.stringval = yytext;
+
 	if (!strcmp(yytext, "-") ) {
 		printf("SUB\n");
+		return SUM;
 	} else if (!strcmp(yytext, "+") ) {
 		printf("ADD\n");
+		return ADD;
 	} else if (!strcmp(yytext, "*") ) {
 		printf("MULT\n");
+		return MULT;
 	} else if (!strcmp(yytext, "/") ) {
 		printf("DIV\n");
+		return DIV;
 	} else if (!strcmp(yytext, "%") ) {
 		printf("MOD\n");
+		return MOD;
 	} else {
 		printf("invalid arithmetic operator\n");
+		exit(1);
 	}
 }
 
