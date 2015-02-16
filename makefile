@@ -2,6 +2,7 @@ all: build
 
 update:
 	git pull
+	touch *
 
 push:
 	git commit -am "automated commit"
