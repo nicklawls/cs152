@@ -27,11 +27,13 @@
 %left MULT DIV
 %left MOD
 
+
+
+%type <intval> expression
 /*
 %type <boolval> bool_exp relation_and_exp relation_exp comp
 %type <outputval> block 
 %type <outputval> multiplicative_exp
-%type <intval> expression
 %type <outputval> program statement declaration
 %type <outputval> var term
 */
