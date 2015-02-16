@@ -47,7 +47,7 @@
 
 %%
 
-input : expression {printf("input -> expression\n")}
+input : term {printf("input -> term\n")}
       /* | term {printf("input -> term\n")}
       | var {printf("input -> var\n")} */
       ;
