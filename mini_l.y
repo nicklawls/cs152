@@ -6,17 +6,15 @@
 
 %union{
 	int intval;
-	bool boolval;
+    double floatval;
 	char* stringval;
-	char* idval;
-	char* outputval;
 }
 
 
 %error-verbose
 %start input
 %token <intval> NUMBER
-%token <idval> IDENT
+%token <stringval> IDENT
 %token SEMICOLON BEGINPROGRAM ENDPROGRAM ASSIGN L_PAREN R_PAREN COLON
 %token INTEGER PROGRAM
 %token ARRAY OF IF THEN ENDIF ELSE ELSEIF WHILE DO BEGINLOOP BREAK CONTINUE
@@ -31,15 +29,15 @@
 
 %type <intval> expression
 /*
-%type <boolval> bool_exp relation_and_exp relation_exp comp
-%type <outputval> block 
-%type <outputval> multiplicative_exp
-%type <outputval> program statement declaration
-%type <outputval> var term
+%type <intval> bool_exp relation_and_exp relation_exp comp
+%type <stringval> block 
+%type <stringval> multiplicative_exp
+%type <stringval> program statement declaration
+%type <stringval> var term
 */
 
 %%
 
-input : expression
+input : expression;
 
 expression : NUMBER {$$ = $1;} ;
