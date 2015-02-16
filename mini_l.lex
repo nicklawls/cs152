@@ -97,26 +97,38 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {SPECIAL} {
 	yycolumno += yyleng;
+	yylval.stringval = yytext;
+
 	if (!strcmp(yytext, ";") ) {
 		printf("SEMICOLON\n");
+		return SEMICOLON;
 	} else if (!strcmp(yytext, ":") ) {
 		printf("COLON\n");
+		return COLON;
 	} else if (!strcmp(yytext, ",") ) {
 		printf("COMMA\n");
+		return COMMA;
 	} else if (!strcmp(yytext, "?") ) {
 		printf("QUESTION\n");
+		return QUESTION;
 	} else if (!strcmp(yytext, "[") ) {
 		printf("L_BRACKET\n");
+		return L_BRACKET;
 	} else if (!strcmp(yytext, "]") ) {
 		printf("R_BRACKET\n");
+		return R_BRACKET;
 	} else if (!strcmp(yytext, "(") ) {
 		printf("L_PAREN\n");
+		return L_PAREN;
 	} else if (!strcmp(yytext, ")") ) {
 		printf("R_PAREN\n");
+		return R_PAREN;
 	} else if (!strcmp(yytext, ":=") ) {
 		printf("ASSIGN\n");
+		return ASSIGN;
 	} else {
 		printf("invalid special character\n");
+		exit(1);
 	}
 }
 
