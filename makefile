@@ -16,13 +16,13 @@ test:
 bisonfile: mini_l.y
 	bison -v -d --file-prefix=y mini_l.y
 
-lexer: flexfile
-	gcc -o lexer lex.yy.c -lfl
+parser: flexfile
+	gcc -o parser y.tab.c lex.yy.c -lfl
 
-build: update lexer 
+build: update parser 
 
-flexfile: bisonfile mini_l.lex
+flexfile: bisonfile mini_l.lex y.tab.h
 	flex mini_l.lex
 
 clean:
-	rm -rf *.c *.h lexer
+	rm -rf *.c *.h *.o parser
