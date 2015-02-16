@@ -12,7 +12,7 @@ test:
 bisonfile: mini_l.y
 	bison -v -d --file-prefix=y mini_l.y
 
-lexer: lex.yy.c
+lexer: flexfile
 	gcc -o lexer lex.yy.c -lfl
 
 build: update lexer 
