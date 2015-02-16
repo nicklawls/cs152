@@ -38,7 +38,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 {NUMBER} {
 	yycolumno += yyleng;
 	printf("NUMBER %s\n", yytext);
-	yyval.intval = atoi(yytext);
+	yylval.intval = atoi(yytext);
 	return NUMBER;
 }
 

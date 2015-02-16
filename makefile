@@ -3,6 +3,10 @@ all: build
 update:
 	git pull
 
+push:
+	git commit -am "automated commit"
+	git push
+	
 run: 
 	./lexer
 
