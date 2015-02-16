@@ -47,7 +47,7 @@ expression : NUMBER {$$ = $1;} ;
 %%
 
 int main (const int argc, const char** argv) {
-    f
+    return 0;
 }
 
 void yyerror(const char* msg) {
