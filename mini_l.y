@@ -48,8 +48,8 @@
 %%
 
 input : expression {printf("input -> expression\n")}
-      | term {printf("input -> term\n")}
-      | var {printf("input -> var\n")}
+      /* | term {printf("input -> term\n")}
+      | var {printf("input -> var\n")} */
       ;
 
 expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)};
