@@ -41,9 +41,9 @@
 
 %%
 
-input : expression;
+input : expression {printf("input -> expression\n")};
 
-expression : NUMBER {$$ = $1; printf("expression -> number %i", $1)} ;
+expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $1)} ;
 
 %%
 
