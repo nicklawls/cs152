@@ -11,8 +11,8 @@
 	int intval;
     double floatval;
     
-    int* intarrayval
-    double* doublearrayval
+    int* intarrayval;
+    double* doublearrayval;
 	
     char* stringval;
 }
