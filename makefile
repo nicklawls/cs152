@@ -2,7 +2,6 @@ all: build
 
 update:
 	git pull
-	touch *
 
 push:
 	git commit -am "automated commit"
@@ -18,6 +17,7 @@ bisonfile: mini_l.y
 	bison -v -d --file-prefix=y mini_l.y
 
 parser: flexfile
+	touch *
 	gcc -o parser y.tab.c lex.yy.c -lfl
 
 build: update parser 
