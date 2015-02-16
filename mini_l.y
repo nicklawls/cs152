@@ -47,23 +47,24 @@
 
 %%
 
-input : expression {printf("input -> expression\n");}
-      | term {printf("input -> term\n");}
-      | var {printf("input -> var\n");}
+input : expression {printf("input -> expression\n")}
+      | term {printf("input -> term\n")}
+      | var {printf("input -> var\n")}
       ;
 
-expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)} ;
+expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)};
 
-var : IDENT {$$ = $1; printf("var -> ident %s\n", $$);}
+var : IDENT {$$ = $1; printf("var -> ident %s\n", $$)}
     | IDENT L_BRACKET expression R_BRACKET {
-        $$ = $1; printf("var -> ident[expression] %s[%i]\n", $$,$3); 
+        $$ = $1; 
+        printf("var -> ident[expression] %s[%i]\n", $$,$3)
     }
     ;
 
-term : MINUS term {$$ = -1 * $2;  printf("term -> MINUS term %s\n", $$) }
-     | var {$$ = $1; printf("term -> var %s\n", $$);}
-     | number {$$ = $1; printf("term -> NUMBER %s\n", $$);}
-     | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression) (%s)\n", $$);}
+term : MINUS term {$$ = -1 * $2;  printf("term -> MINUS term %s\n", $$);}
+     | var {$$ = $1; printf("term -> var %s\n", $$)}
+     | NUMBER {$$ = $1; printf("term -> NUMBER %s\n", $$)}
+     | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression) (%s)\n", $$)}
      ;
 
 %%
