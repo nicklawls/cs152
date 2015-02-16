@@ -7,7 +7,7 @@
 	const char *reserved_words[] = {"and","array","beginloop","beginprogram","break","continue","do","else","elseif","endif","endloop","endprogram","exit","false","if","integer","not","of","or","program","read","then","true","while","write"};
 	typeof(IDENT) reserved_tokens[] = {AND,ARRAY,BEGINLOOP,BEGIN_PROGRAM,BREAK,CONTINUE,DO,ELSE,ELSEIF,ENDIF,ENDLOOP,END_PROGRAM,EXIT,FALSE,IF,INTEGER,NOT,OF,OR,PROGRAM,READ,THEN,TRUE,WHILE,WRITE};
 	size_t keywords = 25;
-	int yycolumno = 0;
+	int yycolumno = 1;
 %}
 
 NEWLINE \n

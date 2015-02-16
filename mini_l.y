@@ -43,7 +43,7 @@
 
 input : expression;
 
-expression : NUMBER {$$ = $1;} ;
+expression : NUMBER {$$ = $1; printf("expression -> number %i", $1.intval)} ;
 
 %%
 
