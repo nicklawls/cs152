@@ -9,7 +9,7 @@
 	bool boolval;
 	char* stringval;
 	char* idval;
-	char* outputval
+	char* outputval;
 }
 
 
@@ -21,8 +21,8 @@
 %token INTEGER PROGRAM
 %token ARRAY OF IF THEN ENDIF ELSE ELSEIF WHILE DO BEGINLOOP BREAK CONTINUE
 %token EXIT READ WRITE 
-%token COMMA QUESTION EQ NEQ LT GT LTE GTE TRUE FALSE
-%left AND OR NOT
+%token COMMA QUESTION TRUE FALSE
+%left AND OR NOT EQ NEQ LT GT LTE GTE
 %left PLUS MINUS
 %left MULT DIV
 %left MOD
@@ -35,3 +35,5 @@
 %type <outputval> var term
 
 %%
+
+expression : NUMBER {$$ = $1;} ;
