@@ -40,4 +40,6 @@
 
 %%
 
+input : expression
+
 expression : NUMBER {$$ = $1;} ;
