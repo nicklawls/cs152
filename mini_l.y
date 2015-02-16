@@ -4,6 +4,7 @@
 	void yyerror(const char *message);
     extern int yylineno;
     extern int yycolumno;
+    FILE* yyin;
 %}
 
 %union{
@@ -47,6 +48,15 @@ expression : NUMBER {$$ = $1;} ;
 %%
 
 int main (const int argc, const char** argv) {
+
+    if (argc > 1) {
+        yyin = fopen(argv[1], "r");
+        if (yyin == NULL) {
+            printf("syntax: %s filename\n", argv[0]);
+            exit(1);
+        }
+    }
+    yyparse();
     return 0;
 }
 
