@@ -46,6 +46,10 @@ expression : NUMBER {$$ = $1;} ;
 
 %%
 
+int main (const int argc, const char** argv) {
+    f
+}
+
 void yyerror(const char* msg) {
     printf("** Line %d, position %d: %s\n", yylineno, yycolumno, msg);
 }
