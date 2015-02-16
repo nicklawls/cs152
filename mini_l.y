@@ -23,7 +23,7 @@
 %token EXIT READ WRITE 
 %token COMMA QUESTION TRUE FALSE
 %left AND OR NOT EQ NEQ LT GT LTE GTE
-%left PLUS MINUS
+%left ADD SUB
 %left MULT DIV
 %left MOD
 

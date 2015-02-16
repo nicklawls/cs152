@@ -76,7 +76,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 	if (!strcmp(yytext, "-") ) {
 		printf("SUB\n");
-		return SUM;
+		return SUB;
 	} else if (!strcmp(yytext, "+") ) {
 		printf("ADD\n");
 		return ADD;
