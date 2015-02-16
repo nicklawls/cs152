@@ -6,7 +6,7 @@ update:
 push:
 	git commit -am "automated commit"
 	git push
-	
+
 run: 
 	./lexer
 
@@ -21,7 +21,7 @@ lexer: flexfile
 
 build: update lexer 
 
-flexfile: mini_l.lex
+flexfile: bisonfile mini_l.lex
 	flex mini_l.lex
 
 clean:
