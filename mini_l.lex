@@ -21,7 +21,7 @@ COMPARISON ==|<>|<|>|<=|>=
 
 DIGIT [0-9]
 
-NUMBER [1-9]{DIGIT}*
+NUMBER 0|[1-9]{DIGIT}*
 
 LETTER [A-Z]|[a-z]
 
