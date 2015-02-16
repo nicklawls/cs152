@@ -61,7 +61,7 @@ var : IDENT {$$ = $1; printf("var -> ident %s\n", $$)}
     }
     ;
 
-term : MINUS term {$$ = -1 * $2;  printf("term -> MINUS term %s\n", $$);}
+term : SUB term {$$ = -1 * $2;  printf("term -> SUB term %s\n", $$);}
      | var {$$ = $1; printf("term -> var %s\n", $$)}
      | NUMBER {$$ = $1; printf("term -> NUMBER %s\n", $$)}
      | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression) (%s)\n", $$)}
