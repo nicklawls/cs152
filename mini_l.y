@@ -2,6 +2,8 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	void yyerror(const char *message);
+    extern int yylineno;
+    extern int yycolumno;
 %}
 
 %union{
@@ -41,3 +43,9 @@
 input : expression;
 
 expression : NUMBER {$$ = $1;} ;
+
+%%
+
+void yyerror(const char* msg) {
+    printf("** Line %d, position %d: %s\n", yylineno, yycolumno, msg);
+}
