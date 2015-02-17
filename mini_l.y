@@ -49,7 +49,7 @@
 */
 
 %%
-input : bool_exp {printf("input -> bool_exp\n")}
+input : stmt_list {printf("input -> bool_exp\n")}
       ;
 
 
