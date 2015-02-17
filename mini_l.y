@@ -151,8 +151,8 @@ m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
       ;
 
 expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp\n")}
-           | m_exp ADD expression {$$ = ($1 + $3); printf("expression -> multiplicative_exp + expression\n")}
-           | m_exp SUB expression {$$ = ($1 - $3); printf("expression -> multiplicative_exp - expression\n")}
+           | expression ADD m_exp {$$ = ($1 + $3); printf("expression -> expression + multiplicative_exp\n")}
+           | expression SUB m_exp {$$ = ($1 - $3); printf("expression -> expression - multiplicative_exp\n")}
            ;
 
 /* will need symbol table lookups on $$ for this one */
