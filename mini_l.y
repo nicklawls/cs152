@@ -38,6 +38,7 @@
 %type <intval> var term
 %type <intval> m_exp comp_exp relation_exp 
 %type <intval> relation_and_exp bool_exp
+%type <stringval> statement var_list stmt_list
 
 /*
 
@@ -48,11 +49,22 @@
 */
 
 %%
-
 input : bool_exp {printf("input -> bool_exp\n")}
-      /* | term {printf("input -> term\n")}
-      | var {printf("input -> var\n")} */
       ;
+
+
+stmt_list : statement {printf("stmt_list -> statement\n")}
+          | statement SEMICOLON stmt_list {printf("stmt_list -> statement; stmt_list\n")}
+          ;
+
+var_list : var {printf("var_list -> var\n")}
+         | var COMMA var_list {printf("var_list -> var, var_list\n")}
+         ;
+
+statement : EXIT | CONTINUE | BREAK {$$ = $1; printf("statement -> %s\n", $1)}
+          | READ var_list {printf("statement -> read var_list")}
+          | WRITE var_list {printf("statement -> write var_list")}
+          ;
 
 bool_exp : relation_and_exp {$$ = $1; printf("bool_exp -> relation_and_exp\n")}
          | relation_and_exp OR bool_exp {
@@ -99,12 +111,12 @@ expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp %i\n", $$)
 
 var : IDENT L_BRACKET expression R_BRACKET {
         $$ = 0; 
-        printf("var -> ident[expression](%s)\n", $1)
+        printf("var -> ident[expression]\n")
     }
 
     | IDENT {
-        printf("var -> ident(%s)\n", $1); // not printing $1 for some reason
         $$ = 0; 
+        printf("var -> ident\n"); // not printing $1 for some reason
     }
 
     ;
