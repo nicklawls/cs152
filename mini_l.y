@@ -76,7 +76,7 @@ elif_list : ELSEIF bool_exp stmt_list {printf("elif_list -> elseif bool_exp stmt
           }
           ;
 
-stmt_list : statement SEMICOLON {printf("stmt_list -> statement ;\n")}
+stmt_list : statement SEMICOLON {printf("stmt_list -> statement;\n")}
           | statement SEMICOLON stmt_list {printf("stmt_list -> statement; stmt_list\n")}
           ;
 
@@ -163,15 +163,15 @@ var : IDENT L_BRACKET expression R_BRACKET {
 
     | IDENT {
         $$ = 0; 
-        printf("var -> ident\n"); // not printing $1 for some reason
+        printf("var -> ident %s\n", $1); // not printing $1 for some reason
     }
 
     ;
 
 term : SUB term {$$ = -1 * $2;  printf("term -> SUB term %i\n", $$);}
-     | var {$$ = $1; printf("term -> var %i\n", $$)}
-     | NUMBER {$$ = $1; printf("term -> NUMBER %i\n", $$)}
-     | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression) (%i)\n", $$)}
+     | var {$$ = $1; printf("term -> var \n")}
+     | NUMBER {$$ = $1; printf("term -> NUMBER \n")}
+     | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression)\n")}
      ;
 
 %%
