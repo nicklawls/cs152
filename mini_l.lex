@@ -115,7 +115,11 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {IDENTIFIER} {
 	yycolumno += yyleng;
-	strcpy(yylval.stringval, yytext);
+	yylval.stringval = yytext;
+
+	printf("Identifier scanned: %s\n", yytext);
+	printf("Copied value: %s\n", yyval.stringval);
+
 	int i;
 	for (i = 0; i < keywords; i++) {
 		if (!strcmp(yytext, reserved_words[i])) {
