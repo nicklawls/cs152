@@ -145,9 +145,9 @@ comp_exp : expression EQ expression {$$ = ($1 == $3); printf("comp_exp -> expres
          ;
 
 m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
-      | term MULT m_exp {$$ = $1 * $3; printf("multiplicative_exp -> term * m_exp\n")}
-      | term DIV m_exp {/*$$ = $1 / $3*/; printf("multiplicative_exp -> term / m_exp\n")} // willdly unsafe
-      | term MOD m_exp {$$ = $1 % $3; printf("multiplicative_exp -> term `mod` m_exp\n")}
+      | m_exp MULT term {$$ = $1 * $3; printf("multiplicative_exp -> multiplicative_exp * term\n")}
+      | m_exp DIV term {/*$$ = $1 / $3*/; printf("multiplicative_exp -> multiplicative_exp / term\n")} // willdly unsafe
+      | m_exp MOD term {$$ = $1 % $3; printf("multiplicative_exp -> multiplicative_exp modulo term\n")}
       ;
 
 expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp\n")}
