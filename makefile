@@ -1,29 +1,37 @@
-all: build
+## all: update parser
+all: parser
 
-update:
-	git pull
-
-push:
-	git commit -am "automated commit"
-	git push
-
-run: 
+run: all
 	./parser
 
-test: 
-	./test_lexer.sh
+test_primes: 
+	./parser tests/primes.min
 
-bisonfile: mini_l.y
-	bison -v -d --file-prefix=y mini_l.y
+test_ifelseif:
+	./parser tests/ifelseiftest.min
+
+test_dowhile:
+	./parser tests/dowhiletest.min
+
+test_mytest:
+	./parser tests/mytest.min
 
 parser: flexfile
 	touch *
 	gcc -o parser y.tab.c lex.yy.c -lfl
 
-build: update parser 
-
 flexfile: bisonfile mini_l.lex y.tab.h
 	flex mini_l.lex
 
+bisonfile: mini_l.y
+	bison -v -d --file-prefix=y mini_l.y
+
 clean:
 	rm -rf *.c *.h *.o *.output parser
+
+## update:
+##	git pull
+
+## push:
+##	git commit -am "automated commit"
+##	git push
