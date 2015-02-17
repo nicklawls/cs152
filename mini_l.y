@@ -36,7 +36,7 @@
 
 %type <intval> expression
 %type <intval> var term
-%type <intval> multiplicative_exp
+//%type <intval> multiplicative_exp
 
 /*
 %type <intval> bool_exp relation_and_exp relation_exp comp
