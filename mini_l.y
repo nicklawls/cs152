@@ -61,7 +61,9 @@ var_list : var {printf("var_list -> var\n")}
          | var COMMA var_list {printf("var_list -> var, var_list\n")}
          ;
 
-statement : EXIT | CONTINUE | BREAK {printf("statement -> %s\n", $1)}
+statement : EXIT {printf("statement -> exit\n")}
+          | CONTINUE {printf("statement -> continue\n")}
+          | BREAK {printf("statement -> break\n")}
           | READ var_list {printf("statement -> read var_list")}
           | WRITE var_list {printf("statement -> write var_list")}
           ;
