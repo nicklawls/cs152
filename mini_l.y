@@ -36,7 +36,7 @@
 
 %type <intval> expression
 %type <intval> var term
-%type <intval> m_exp comp_exp relation_exp
+%type <intval> m_exp comp_exp relation_exp bool_exp
 
 /*
 %type <intval> bool_exp relation_and_exp
@@ -74,8 +74,8 @@ m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
       ;
 
 expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp %i\n", $$)}
-           | m_exp + m_exp {$$ = $1 + $3; printf("expression -> multiplicative_exp + multiplicative_exp %i\n")}
-           | m_exp + m_exp {$$ = $1 - $3; printf("expression -> multiplicative_exp - multiplicative_exp %i\n")}
+           | m_exp + m_exp {$$ = ($1 + $3); printf("expression -> multiplicative_exp + multiplicative_exp %i\n")}
+           | m_exp + m_exp {$$ = ($1 - $3); printf("expression -> multiplicative_exp - multiplicative_exp %i\n")}
            ;
 
 /* will need symbol table lookups on $$ for this one */
