@@ -48,7 +48,7 @@
 input : Program {printf("input -> Program\n")}
       ;
 
-Program : PROGRAM ident SEMICOLON block END_PROGRAM {
+Program : PROGRAM IDENT SEMICOLON block END_PROGRAM {
             printf("Program -> program ident ; block endprogram\n");
         }
         ;
