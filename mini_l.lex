@@ -115,7 +115,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {IDENTIFIER} {
 	yycolumno += yyleng;
-	yylval.stringval = strdupa(yytext);
+	yylval.stringval = _strdupa(yytext);
 
 	printf("Identifier scanned: %s\n", yytext);
 	printf("Copied value: %s\n", yylval.stringval);
