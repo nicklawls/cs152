@@ -114,7 +114,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {IDENTIFIER} {
 	yycolumno += yyleng;
-	yylval.stringval = yytext;
+	strcpy(yylval.stringval, yytext);
 	int i;
 	for (i = 0; i < keywords; i++) {
 		if (!strcmp(yytext, reserved_words[i])) {

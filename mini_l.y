@@ -167,7 +167,6 @@ var : IDENT L_BRACKET expression R_BRACKET {
         $$ = 0; 
         printf("var -> ident %s\n", $1); // not printing $1 for some reason
     }
-
     ;
 
 term : SUB term {$$ = -1 * $2;  printf("term -> SUB term\n");}
