@@ -116,16 +116,16 @@ statement : EXIT {printf("statement -> exit\n")}
           ;
 
 bool_exp : relation_and_exp {$$ = $1; printf("bool_exp -> relation_and_exp\n")}
-         | relation_and_exp OR bool_exp {
+         | bool_exp OR relation_and_exp {
             $$ = $1 || $3; 
-            printf("relation_and_exp -> relation_exp AND relation_and_exp\n");
+            printf("bool_exp -> bool_exp OR relation_and_exp\n");
          }
          ;
 
 relation_and_exp : relation_exp {$$ = $1; printf("relation_and_exp -> relation_exp\n")}
-                 | relation_exp AND relation_and_exp {
+                 | relation_and_exp AND relation_exp {
                     $$ = $1 && $3; 
-                    printf("relation_and_exp -> relation_exp AND relation_and_exp\n");
+                    printf("relation_and_exp -> relation_and_exp AND relation_exp\n");
                  }
                  ;
 
