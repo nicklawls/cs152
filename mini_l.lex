@@ -118,7 +118,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 	yylval.stringval = yytext;
 
 	printf("Identifier scanned: %s\n", yytext);
-	printf("Copied value: %s\n", yyval.stringval);
+	printf("Copied value: %s\n", yylval.stringval);
 
 	int i;
 	for (i = 0; i < keywords; i++) {
