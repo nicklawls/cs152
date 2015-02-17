@@ -57,7 +57,10 @@ expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)};
 /* will need to symbol table lookups on $$ for this one */
 /* stubbing with 0 for now */
 
-var : IDENT {$$ = 0; printf("var -> ident(%s)\n", $1)}
+var : IDENT {
+        $$ = 0; 
+        printf("var -> ident(%s)\n", "poopfaggot")
+    }
     | IDENT L_BRACKET expression R_BRACKET {
         $$ = 0; 
         printf("var -> ident[expression](%s)\n", $1)
