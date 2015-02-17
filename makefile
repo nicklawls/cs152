@@ -26,4 +26,4 @@ flexfile: bisonfile mini_l.lex y.tab.h
 	flex mini_l.lex
 
 clean:
-	rm -rf *.c *.h *.o parser
+	rm -rf *.c *.h *.o *.output parser
