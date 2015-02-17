@@ -60,7 +60,7 @@ expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)};
 var : IDENT {$$ = 0; printf("var -> ident(%s)\n", $1)}
     | IDENT L_BRACKET expression R_BRACKET {
         $$ = 0; 
-        printf("var -> ident[expression](%s[%i])\n", $1,$3)
+        printf("var -> ident[expression](%s)\n", $1)
     }
     ;
 
