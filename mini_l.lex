@@ -45,7 +45,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {COMPARISON} {
 	yycolumno += yyleng;
-	yylval.stringval = yytext;
+	// yylval.stringval = yytext;
 
 	if (!strcmp(yytext, "==") ) {
 		return EQ;
@@ -67,7 +67,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {ARITHMETIC} {
 	yycolumno += yyleng;
-	yylval.stringval = yytext;
+	// yylval.stringval = yytext;
 
 	if (!strcmp(yytext, "-") ) {
 		return SUB;
@@ -87,7 +87,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {SPECIAL} {
 	yycolumno += yyleng;
-	yylval.stringval = yytext;
+	// yylval.stringval = yytext;
 
 	if (!strcmp(yytext, ";") ) {
 		return SEMICOLON;
@@ -115,7 +115,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 
 {IDENTIFIER} {
 	yycolumno += yyleng;
-	yylval.stringval = strdup(yytext);
+	yylval.stringval = strdupa(yytext);
 
 	printf("Identifier scanned: %s\n", yytext);
 	printf("Copied value: %s\n", yylval.stringval);
