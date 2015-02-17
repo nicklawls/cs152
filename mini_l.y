@@ -36,10 +36,11 @@
 
 %type <intval> expression
 %type <intval> var term
-%type <intval> m_exp comp_exp relation_exp bool_exp
+%type <intval> m_exp comp_exp relation_exp 
+%type <intval> relation_and_exp bool_exp
 
 /*
-%type <intval> bool_exp relation_and_exp
+
 %type <stringval> block 
 
 %type <stringval> program statement declaration
@@ -53,10 +54,25 @@ input : var {printf("input -> var\n")}
       | var {printf("input -> var\n")} */
       ;
 
+bool_exp : relation_and_exp {$$ = $1; printf("bool_exp -> relation_and_exp\n")}
+         | relation_and_exp OR bool_exp {
+            $$ = $1 || $3; 
+            printf("relation_and_exp -> relation_exp AND relation_and_exp\n");
+         }
+         ;
+
+relation_and_exp : relation_exp {$$ = $1; printf("relation_and_exp -> relation_exp\n")}
+                 | relation_exp AND relation_exp {
+                    $$ = $1 && $3; 
+                    printf("relation_and_exp -> relation_exp AND relation_and_exp\n");
+                 }
+                 ;
+
 relation_exp : comp_exp {$$ = $1; printf("relation_exp -> comp_exp\n")}
              | TRUE {$$ = 1; printf("relation_exp -> TRUE\n")}
              | FALSE {$$ = 0; printf("relation_exp -> FALSE\n")}
              | L_PAREN bool_exp R_PAREN {$$ = $2; printf("relation_exp -> (bool_exp)\n")}
+             | NOT relation_exp {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp\n")}
              ;
 
 comp_exp : expression EQ expression {$$ = ($1 == $3); printf("comp_exp -> expression == expression\n")}
