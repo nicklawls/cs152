@@ -49,7 +49,7 @@
 
 %%
 
-input : var {printf("input -> var\n")}
+input : bool_exp {printf("input -> bool_exp\n")}
       /* | term {printf("input -> term\n")}
       | var {printf("input -> var\n")} */
       ;
