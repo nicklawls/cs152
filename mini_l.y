@@ -76,7 +76,7 @@ elif_list : ELSEIF bool_exp stmt_list {printf("elif_list -> elseif bool_exp stmt
           }
           ;
 
-stmt_list : statement {printf("stmt_list -> statement\n")}
+stmt_list : statement SEMICOLON {printf("stmt_list -> statement ;\n")}
           | statement SEMICOLON stmt_list {printf("stmt_list -> statement; stmt_list\n")}
           ;
 
