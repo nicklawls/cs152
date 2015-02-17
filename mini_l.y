@@ -36,10 +36,10 @@
 
 %type <intval> expression
 %type <intval> var term
-//%type <intval> multiplicative_exp
+%type <intval> m_exp comp_exp relation_exp
 
 /*
-%type <intval> bool_exp relation_and_exp relation_exp comp
+%type <intval> bool_exp relation_and_exp
 %type <stringval> block 
 
 %type <stringval> program statement declaration
@@ -53,9 +53,32 @@ input : var {printf("input -> var\n")}
       | var {printf("input -> var\n")} */
       ;
 
-expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)};
+relation_exp : comp_exp {$$ = $1; printf("relation_exp -> comp_exp\n")}
+             | TRUE {$$ = 1; printf("relation_exp -> TRUE\n")}
+             | FALSE {$$ = 0; printf("relation_exp -> FALSE\n")}
+             | L_PAREN bool_exp R_PAREN {$$ = $2; printf("relation_exp -> (bool_exp)\n")}
+             ;
 
-/* will need to symbol table lookups on $$ for this one */
+comp_exp : expression EQ expression {$$ = ($1 == $3); printf("comp_exp -> expression == expression\n")}
+         | expression NEQ expression {$$ = ($1 != $3); printf("comp_exp -> expression <> expression\n")}
+         | expression LTE expression {$$ = ($1 <= $3); printf("comp_exp -> expression <= expression\n")}
+         | expression GTE expression {$$ = ($1 >= $3); printf("comp_exp -> expression >= expression\n")}
+         | expression LT expression {$$ = ($1 < $3); printf("comp_exp -> expression < expression\n")}
+         | expression GT expression {$$ = ($1 > $3); printf("comp_exp -> expression > expression\n")}
+         ;
+
+m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
+      | term MULT term {$$ = $1 * $3; printf("multiplicative_exp -> term * term\n")}
+      | term DIV term {$$ = $1 / $3; printf("multiplicative_exp -> term / term\n")} // willdly unsafe
+      | term MOD term {$$ = $1 % $3; printf("multiplicative_exp -> term % term\n")}
+      ;
+
+expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp %i\n", $$)}
+           | m_exp + m_exp {$$ = $1 + $3; printf("expression -> multiplicative_exp + multiplicative_exp %i\n")}
+           | m_exp + m_exp {$$ = $1 - $3; printf("expression -> multiplicative_exp - multiplicative_exp %i\n")}
+           ;
+
+/* will need symbol table lookups on $$ for this one */
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
