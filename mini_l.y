@@ -40,7 +40,7 @@
 %type <intval> relation_and_exp bool_exp
 %type <stringval> statement var_list stmt_list
 %type <stringval> block decl_list id_list
-%type <stringval> Program statement declaration
+%type <stringval> Program declaration
 
 
 
