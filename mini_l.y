@@ -36,18 +36,19 @@
 
 %type <intval> expression
 %type <intval> var term
+%type <intval> multiplicative_exp
 
 /*
 %type <intval> bool_exp relation_and_exp relation_exp comp
 %type <stringval> block 
-%type <stringval> multiplicative_exp
+
 %type <stringval> program statement declaration
 
 */
 
 %%
 
-input : term {printf("input -> term\n")}
+input : var {printf("input -> var\n")}
       /* | term {printf("input -> term\n")}
       | var {printf("input -> var\n")} */
       ;
@@ -63,7 +64,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
     }
 
     | IDENT {
-        printf("var -> ident(%s)\n", $1);
+        printf("var -> ident(%s)\n", $1); // not printing $1 for some reason
         $$ = 0; 
     }
 
