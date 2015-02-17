@@ -143,14 +143,14 @@ comp_exp : expression EQ expression {$$ = ($1 == $3); printf("comp_exp -> expres
          ;
 
 m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
-      | term MULT term {$$ = $1 * $3; printf("multiplicative_exp -> term * term\n")}
-      | term DIV term {/*$$ = $1 / $3*/; printf("multiplicative_exp -> term / term\n")} // willdly unsafe
-      | term MOD term {$$ = $1 % $3; printf("multiplicative_exp -> term % term\n")}
+      | term MULT m_exp {$$ = $1 * $3; printf("multiplicative_exp -> term * m_exp\n")}
+      | term DIV m_exp {/*$$ = $1 / $3*/; printf("multiplicative_exp -> term / m_exp\n")} // willdly unsafe
+      | term MOD m_exp {$$ = $1 % $3; printf("multiplicative_exp -> term % m_exp\n")}
       ;
 
 expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp\n")}
-           | m_exp ADD m_exp {$$ = ($1 + $3); printf("expression -> multiplicative_exp + multiplicative_exp\n")}
-           | m_exp SUB m_exp {$$ = ($1 - $3); printf("expression -> multiplicative_exp - multiplicative_exp\n")}
+           | m_exp ADD expression {$$ = ($1 + $3); printf("expression -> multiplicative_exp + expression\n")}
+           | m_exp SUB expression {$$ = ($1 - $3); printf("expression -> multiplicative_exp - expression\n")}
            ;
 
 /* will need symbol table lookups on $$ for this one */
