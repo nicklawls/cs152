@@ -97,7 +97,7 @@ statement : EXIT {printf("statement -> exit\n")}
           }
           | var ASSIGN expression {printf("statement -> var := expression\n")}
           | var ASSIGN bool_exp QUESTION expression COLON expression {
-                printf("statement -> var := bool_exp ? expression : expression");
+                printf("statement -> var := bool_exp ? expression : expression\n");
           }
           | IF bool_exp THEN stmt_list ENDIF {
                 printf("statement -> if bool_exp then stmt_list endif\n");
