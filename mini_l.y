@@ -121,7 +121,7 @@ bool_exp : relation_and_exp {$$ = $1; printf("bool_exp -> relation_and_exp\n")}
          ;
 
 relation_and_exp : relation_exp {$$ = $1; printf("relation_and_exp -> relation_exp\n")}
-                 | relation_exp AND relation_exp {
+                 | relation_exp AND relation_and_exp {
                     $$ = $1 && $3; 
                     printf("relation_and_exp -> relation_exp AND relation_and_exp\n");
                  }
@@ -168,7 +168,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
 
     ;
 
-term : SUB term {$$ = -1 * $2;  printf("term -> SUB term %i\n", $$);}
+term : SUB term {$$ = -1 * $2;  printf("term -> SUB term\n");}
      | var {$$ = $1; printf("term -> var \n")}
      | NUMBER {$$ = $1; printf("term -> NUMBER \n")}
      | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression)\n")}
