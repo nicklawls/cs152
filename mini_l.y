@@ -58,10 +58,10 @@ expression : NUMBER {$$ = $1; printf("expression -> number %i\n", $$)};
 /* stubbing with 0 for now */
 
 var : IDENT {
+        printf("var -> ident(%s)\n", $1);
         $$ = 0; 
-        char* stub = $1;
-        printf("var -> ident(%s)\n", stub);
     }
+    
     | IDENT L_BRACKET expression R_BRACKET {
         $$ = 0; 
         printf("var -> ident[expression](%s)\n", $1)
