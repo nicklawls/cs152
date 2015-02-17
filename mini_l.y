@@ -148,7 +148,7 @@ m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
       | term MOD term {$$ = $1 % $3; printf("multiplicative_exp -> term % term\n")}
       ;
 
-expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp %i\n", $$)}
+expression : m_exp {$$ = $1; printf("expression -> multiplicative_exp\n")}
            | m_exp ADD m_exp {$$ = ($1 + $3); printf("expression -> multiplicative_exp + multiplicative_exp %i\n")}
            | m_exp SUB m_exp {$$ = ($1 - $3); printf("expression -> multiplicative_exp - multiplicative_exp %i\n")}
            ;
