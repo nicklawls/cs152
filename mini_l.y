@@ -39,19 +39,42 @@
 %type <intval> m_exp comp_exp relation_exp 
 %type <intval> relation_and_exp bool_exp
 %type <stringval> statement var_list stmt_list
+%type <stringval> block decl_list id_list
+%type <stringval> Program statement declaration
 
-/*
 
-%type <stringval> block 
-
-%type <stringval> program statement declaration
-
-*/
 
 %%
-input : stmt_list {printf("input -> bool_exp\n")}
+input : Program {printf("input -> Program\n")}
       ;
 
+Program : PROGRAM ident SEMICOLON block END_PROGRAM {
+            printf("Program -> program ident ; block endprogram\n");
+        }
+        ;
+
+block : decl_list BEGIN_PROGRAM stmt_list {printf("block -> decl_list beginprogram stmt_list\n")}
+      ;
+
+decl_list : declaration SEMICOLON {printf("decl_list -> declaration ;\n")}
+          | declaration SEMICOLON decl_list {printf("decl_list -> declaration ; decl_list\n")}
+          ;
+
+declaration : id_list COLON INTEGER {printf("declaration -> id_list : integer\n")}
+            | id_list COLON ARRAY L_BRACKET NUMBER R_BRACKET OF INTEGER {
+                printf("declaration -> id_list : array [number] of integer\n")
+            }
+            ;
+
+id_list : IDENT {printf("id_list -> ident\n")}
+        | IDENT COMMA id_list {printf("id_list -> ident, id_list\n")}
+        ;
+
+elif_list : ELSEIF bool_exp stmt_list {printf("elif_list -> elseif bool_exp stmt_list\n")}
+          | ELSEIF bool_exp stmt_list elif_list {
+                printf("elif_list -> elseif bool_exp stmt_list elif_list\n");
+          }
+          ;
 
 stmt_list : statement {printf("stmt_list -> statement\n")}
           | statement SEMICOLON stmt_list {printf("stmt_list -> statement; stmt_list\n")}
@@ -64,8 +87,30 @@ var_list : var {printf("var_list -> var\n")}
 statement : EXIT {printf("statement -> exit\n")}
           | CONTINUE {printf("statement -> continue\n")}
           | BREAK {printf("statement -> break\n")}
-          | READ var_list {printf("statement -> read var_list")}
-          | WRITE var_list {printf("statement -> write var_list")}
+          | READ var_list {printf("statement -> read var_list\n")}
+          | WRITE var_list {printf("statement -> write var_list\n")}
+          | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
+                printf("statement -> do beginloop stmt_list endloop while bool_exp\n");
+          }
+          | WHILE bool_exp BEGINLOOP stmt_list ENDLOOP {
+                printf("statement -> while bool_exp beginloop stmt_list endloop\n");
+          }
+          | var ASSIGN expression {printf("statement -> var := expression\n")}
+          | var ASSIGN bool_exp QUESTION expression COLON expression {
+                printf("statement -> var := bool_exp ? expression : expression");
+          }
+          | IF bool_exp THEN stmt_list ENDIF {
+                printf("statement -> if bool_exp then stmt_list endif\n");
+          }
+          | IF bool_exp THEN stmt_list ELSE stmt_list ENDIF {
+                printf("statement -> if bool_exp then stmt_list else stmt_list endif\n");
+          }
+          | IF bool_exp THEN stmt_list elif_list ENDIF {
+                printf("statement -> if bool_exp then stmt_list elif_list endif\n");
+          }
+          | IF bool_exp THEN stmt_list elif_list ELSE stmt_list ENDIF {
+                printf("statement -> if bool_exp then stmt_list elif_list else stmt_list endif\n");
+          }
           ;
 
 bool_exp : relation_and_exp {$$ = $1; printf("bool_exp -> relation_and_exp\n")}
