@@ -2,19 +2,17 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	void yyerror(const char *message);
-    extern int yylineno;
-    extern int yycolumno;
-    FILE* yyin;
+  extern int yylineno;
+  extern int yycolumno;
+  FILE* yyin;
 %}
 
 %union{
 	int intval;
-    double floatval;
-    
-    int* intarrayval;
-    double* doublearrayval;
-	
-    char* stringval;
+  double floatval;  
+  int* intarrayval;
+  double* doublearrayval;
+  char* stringval;
 }
 
 
@@ -38,9 +36,9 @@
 
 %type <intval> expression
 %type <intval> var term
-%type <intval> m_exp comp_exp relation_exp 
+%type <intval> m_exp relation_exp 
 %type <intval> relation_and_exp bool_exp
-%type <stringval> statement var_list stmt_list
+%type <stringval> comp statement var_list stmt_list
 %type <stringval> block decl_list id_list
 %type <stringval> Program declaration
 
@@ -129,23 +127,23 @@ relation_and_exp : relation_exp {$$ = $1; printf("relation_and_exp -> relation_e
                  }
                  ;
 
-relation_exp' : comp_exp {$$ = $1; printf("relation_exp' -> comp_exp\n")}
+relation_expA : expression comp expression {printf("relation_exp' -> expression comp expression\n")}
               | TRUE {$$ = 1; printf("relation_exp' -> TRUE\n")}
               | FALSE {$$ = 0; printf("relation_exp' -> FALSE\n")}
               | L_PAREN bool_exp R_PAREN {$$ = $2; printf("relation_exp' -> (bool_exp)\n")}
               ;
 
-relation_exp | NOT relation_exp' {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp\n")}
-             | relation_exp' {$$ = $1; printf("relation_exp -> not relation_exp\n")}
+relation_exp | NOT relation_expA {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp\n")}
+             | relation_expA {$$ = $1; printf("relation_exp -> not relation_exp\n")}
              ;
 
-comp_exp : expression EQ expression {$$ = ($1 == $3); printf("comp_exp -> expression == expression\n")}
-         | expression NEQ expression {$$ = ($1 != $3); printf("comp_exp -> expression <> expression\n")}
-         | expression LTE expression {$$ = ($1 <= $3); printf("comp_exp -> expression <= expression\n")}
-         | expression GTE expression {$$ = ($1 >= $3); printf("comp_exp -> expression >= expression\n")}
-         | expression LT expression {$$ = ($1 < $3); printf("comp_exp -> expression < expression\n")}
-         | expression GT expression {$$ = ($1 > $3); printf("comp_exp -> expression > expression\n")}
-         ;
+comp : EQ  {$$ = "=="; printf("comp -> ==\n")}
+     | NEQ {$$ = "!="; printf("comp -> <>\n")}
+     | LTE {$$ = "<="; printf("comp -> <=\n")}
+     | GTE {$$ = ">="; printf("comp -> >=\n")}
+     | LT  {$$ = "<"; printf("comp->  < \n")}
+     | GT  {$$ = ">"; printf("comp->  > \n")}
+     ;
 
 m_exp : term {$$ = $1; printf("multiplicative_exp -> term\n")}
       | m_exp MULT term {$$ = $1 * $3; printf("multiplicative_exp -> multiplicative_exp * term\n")}
@@ -172,11 +170,11 @@ var : IDENT L_BRACKET expression R_BRACKET {
     }
     ;
 
-term : SUB term' {$$ = -1 * $2;  printf("term -> SUB term'\n");}
-     | term' {$$ = $1;  printf("term -> term'\n");}
+term : SUB termA {$$ = -1 * $2;  printf("term -> SUB term'\n");}
+     | termA {$$ = $1;  printf("term -> term'\n");}
      ;
 
-term' : var {$$ = $1; printf("term' -> var \n")}
+termA : var {$$ = $1; printf("term' -> var \n")}
       | NUMBER {$$ = $1; printf("term' -> NUMBER \n")}
       | L_PAREN expression R_PAREN {$$ = $2; printf("term' -> (expression)\n")}
       ;
