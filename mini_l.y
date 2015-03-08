@@ -133,8 +133,8 @@ relation_expA : expression comp expression {printf("relation_exp' -> expression 
               | L_PAREN bool_exp R_PAREN {$$ = $2; printf("relation_exp' -> (bool_exp)\n")}
               ;
 
-relation_exp | NOT relation_expA {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp\n")}
-             | relation_expA {$$ = $1; printf("relation_exp -> not relation_exp\n")}
+relation_exp | NOT relation_expA {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp'\n")}
+             | relation_expA {printf("relation_exp -> relation_exp'\n")}
              ;
 
 comp : EQ  {$$ = "=="; printf("comp -> ==\n")}
