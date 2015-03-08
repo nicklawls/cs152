@@ -35,8 +35,8 @@
 
 
 %type <intval> expression
-%type <intval> var term
-%type <intval> m_exp relation_exp 
+%type <intval> var term termA
+%type <intval> m_exp relation_exp relation_expA
 %type <intval> relation_and_exp bool_exp
 %type <stringval> comp statement var_list stmt_list
 %type <stringval> block decl_list id_list
