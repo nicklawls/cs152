@@ -129,11 +129,14 @@ relation_and_exp : relation_exp {$$ = $1; printf("relation_and_exp -> relation_e
                  }
                  ;
 
-relation_exp : comp_exp {$$ = $1; printf("relation_exp -> comp_exp\n")}
-             | TRUE {$$ = 1; printf("relation_exp -> TRUE\n")}
-             | FALSE {$$ = 0; printf("relation_exp -> FALSE\n")}
-             | L_PAREN bool_exp R_PAREN {$$ = $2; printf("relation_exp -> (bool_exp)\n")}
-             | NOT relation_exp {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp\n")}
+relation_exp' : comp_exp {$$ = $1; printf("relation_exp' -> comp_exp\n")}
+              | TRUE {$$ = 1; printf("relation_exp' -> TRUE\n")}
+              | FALSE {$$ = 0; printf("relation_exp' -> FALSE\n")}
+              | L_PAREN bool_exp R_PAREN {$$ = $2; printf("relation_exp' -> (bool_exp)\n")}
+              ;
+
+relation_exp | NOT relation_exp' {$$ = $2 >= 1 ? 0 : 1; printf("relation_exp -> not relation_exp\n")}
+             | relation_exp' {$$ = $1; printf("relation_exp -> not relation_exp\n")}
              ;
 
 comp_exp : expression EQ expression {$$ = ($1 == $3); printf("comp_exp -> expression == expression\n")}
@@ -169,11 +172,14 @@ var : IDENT L_BRACKET expression R_BRACKET {
     }
     ;
 
-term : SUB term {$$ = -1 * $2;  printf("term -> SUB term\n");}
-     | var {$$ = $1; printf("term -> var \n")}
-     | NUMBER {$$ = $1; printf("term -> NUMBER \n")}
-     | L_PAREN expression R_PAREN {$$ = $2; printf("term -> (expression)\n")}
+term : SUB term' {$$ = -1 * $2;  printf("term -> SUB term'\n");}
+     | term' {$$ = $1;  printf("term -> term'\n");}
      ;
+
+term' : var {$$ = $1; printf("term' -> var \n")}
+      | NUMBER {$$ = $1; printf("term' -> NUMBER \n")}
+      | L_PAREN expression R_PAREN {$$ = $2; printf("term' -> (expression)\n")}
+      ;
 
 %%
 
