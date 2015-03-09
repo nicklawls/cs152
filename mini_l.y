@@ -182,7 +182,7 @@ term : SUB termA {$$ = -1 * $2;  if (verbose) {printf("term -> SUB term'\n");}}
      | termA {$$ = $1;  if (verbose) {printf("term -> term'\n");}}
      ;
 
-termA : var {$$ = $1; if (verbose) {printf("term' -> var \n");}}
+termA : var {$$ = 15; if (verbose) {printf("term' -> var \n");}}
       | NUMBER {$$ = $1; if (verbose) {printf("term' -> NUMBER \n");}}
       | L_PAREN expression R_PAREN {$$ = $2; if (verbose) {printf("term' -> (expression)\n");}}
       ;
