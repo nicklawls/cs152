@@ -166,7 +166,8 @@ var : IDENT L_BRACKET expression R_BRACKET {
         // check for symbol in st
         char buff[100];
         snprintf(buff,100, "%s,%i\n", $1, $3);
-        if (out) {printf(buff);}
+        $$ = strdup(buff);
+        if (out) {printf($$);}
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
