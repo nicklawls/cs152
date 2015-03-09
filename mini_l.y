@@ -18,7 +18,7 @@
     char* dst;
     char* src_1;
     char* src_2;
-  }
+  } quad;
 }
 
 
