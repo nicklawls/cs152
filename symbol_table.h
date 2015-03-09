@@ -28,7 +28,7 @@ int symtab_get(struct symbol_table symtab, char* key) {
         int length = symtab.length;
         int i = 0;
         while ( i < length) {
-            if (strcmp(key,symtab.st[i].name)) { // if name found
+            if (!strcmp(key,symtab.st[i].name)) { // if name found
                 return i;
             }
             ++i;

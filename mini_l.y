@@ -8,11 +8,12 @@
   FILE* yyin;
   int verbose = 1;
 
-  //struct symbol_table symtab;
-  //symtab_init(symtab);
+  struct symbol_table symtab;
+  
 %}
 
 %union{
+  int* mem;
 	int intval;
   double floatval;  
   int* intarrayval;
@@ -43,7 +44,8 @@
 %type <intval> term termA
 %type <intval> m_exp relation_exp relation_expA
 %type <intval> relation_and_exp bool_exp
-%type <stringval> comp statement var_list stmt_list var
+%type <stringval> comp statement var_list stmt_list 
+%type <mem> var
 %type <stringval> block decl_list id_list
 %type <stringval> Program declaration
 
@@ -165,11 +167,7 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-        // need to see if this creates two unique values or reinterprets a single value
-        $<stringval>$ = strdup($1);
-        printf("HELLO -> %s\n", $<stringval>$);
-        $<intval>$ = $3;
-        printf("YOLO -> %i\n", $<intval>$);
+        // $$ = address of lookup(key=$1, offset=$3)
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
@@ -198,6 +196,7 @@ int main (const int argc, const char** argv) {
         exit(1);
       }
   }
+  symtab_init(symtab);
   yyparse();
   return 0;
 }
