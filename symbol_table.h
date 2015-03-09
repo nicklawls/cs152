@@ -26,10 +26,12 @@ void symtab_init(struct symbol_table symtab) {
 int symtab_get(struct symbol_table symtab, char* key) { 
     if (symtab.initialized) {
         int length = symtab.length;
-        for (int i = 0; i < length; ++i) {
+        int i = 0;
+        while ( i < length) {
             if (strcmp(key,symtab.st[i].name)) { // if name found
                 return i;
             }
+            ++i;
         }
     } else {
         printf("symbol table uninitialized\n");
@@ -68,8 +70,10 @@ void symtab_insert_int_array(struct symbol_table symtab, char* name,
     if (symtab.initialized) {
         struct symbol newsym;
         newsym.name = strdup(name);
-        for (int i = 0; i < vals_length; ++i) {    
-                newsym.value.intarrval[i] = values[i];
+        int i = 0;
+        while ( i < vals_length) {    
+            newsym.value.intarrval[i] = values[i];
+            ++i;
         }
         
         int index = symtab_get(symtab, name);
