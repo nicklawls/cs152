@@ -1,6 +1,7 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
+  #include "symbol_table.h"
 	void yyerror(const char *message);
   extern int yylineno;
   extern int yycolumno;
