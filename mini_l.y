@@ -166,8 +166,9 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 
 var : IDENT L_BRACKET expression R_BRACKET {
         // need to see if this creates two unique values or reinterprets a single value
-        $$->stringval = strdup($1);
+        $<stringval>$ = strdup($1);
         $<intval>$ = $3;
+        printf("var -> %s[%i]\n", $<stringval>$, $<intval>$);
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
