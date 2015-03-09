@@ -11,10 +11,14 @@
 
 %union{
 	int intval;
-  double floatval;  
   int* intarrayval;
-  double* doublearrayval;
   char* stringval;
+  struct quad {
+    char* op;
+    char* dst;
+    char* src_1;
+    char* src_2;
+  }
 }
 
 
