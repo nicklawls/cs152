@@ -7,6 +7,9 @@
   extern int yycolumno;
   FILE* yyin;
   int verbose = 0;
+
+  struct symbol_table symtab;
+  symtab_init(symtab);
 %}
 
 %union{
@@ -162,7 +165,8 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-        $<stringval>$ = strdup($1);
+        // need to see if this creates two unique values or reinterprets a single value
+        $$->stringval = strdup($1);
         $<intval>$ = $3;
         if (verbose) {printf("var -> ident[expression]\n");}
     }

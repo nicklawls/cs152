@@ -44,7 +44,7 @@ int symtab_get(struct symbol_table symtab, char* key) {
 // insert functions will increment the length of the symbol table if not present
 // and will append at the original location if it is
 
-void symtab_insert_int(struct symbol_table symtab, char* name, int value ) {
+void symtab_put_int(struct symbol_table symtab, char* name, int value ) {
     if (symtab.initialized) {
         struct symbol newsym;
         newsym.name = strdup(name);
@@ -64,8 +64,8 @@ void symtab_insert_int(struct symbol_table symtab, char* name, int value ) {
     }
 }
 
-// be very careful with array bounds
-void symtab_insert_int_array(struct symbol_table symtab, char* name, 
+// should just insert a single int at a single array index, will be called inside for loops
+void symtab_put_array(struct symbol_table symtab, char* name, 
                              int values[], size_t vals_length ) {
     if (symtab.initialized) {
         struct symbol newsym;
