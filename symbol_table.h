@@ -6,7 +6,7 @@ struct symbol {
     char* name;
     union {
         int intval;
-        int intarrval[256];
+        int intarrval[1024];
     } value;
 };
 

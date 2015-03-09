@@ -143,8 +143,8 @@ comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
      | NEQ {$$ = "!="; if (verbose) {printf("comp -> <>\n");}}
      | LTE {$$ = "<="; if (verbose) {printf("comp -> <=\n");}}
      | GTE {$$ = ">="; if (verbose) {printf("comp -> >=\n");}}
-     | LT  {$$ = "<"; if (verbose) {printf("comp->  < \n");}}
-     | GT  {$$ = ">"; if (verbose) {printf("comp->  > \n");}}
+     | LT  {$$ = "<"; if (verbose) {printf("comp-> < \n");}}
+     | GT  {$$ = ">"; if (verbose) {printf("comp-> > \n");}}
      ;
 
 m_exp : term {$$ = $1; if (verbose) {printf("multiplicative_exp -> term\n");}}
@@ -162,12 +162,13 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-        $$ = 0; 
+        $<stringval>$ = $1;
+        $<intval>$ = $3 
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
-        $$ = 0; 
+        $$ = $<stringval>; 
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
