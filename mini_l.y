@@ -8,8 +8,8 @@
   FILE* yyin;
   int verbose = 0;
 
-  struct symbol_table symtab;
-  symtab_init(symtab);
+  //struct symbol_table symtab;
+  //symtab_init(symtab);
 %}
 
 %union{
