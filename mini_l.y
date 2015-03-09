@@ -6,10 +6,7 @@
   extern int yylineno;
   extern int yycolumno;
   FILE* yyin;
-  int verbose = 1;
-
-  struct symbol_table symtab;
-  
+  int verbose = 1;  
 %}
 
 %union{
