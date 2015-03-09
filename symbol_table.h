@@ -17,9 +17,9 @@ struct symbol_table {
 } symtab;
 
 
-void symtab_init(struct symbol_table symtab) {
-    symtab.length = 0;
-    symtab.initialized = 1;
+void symtab_init(struct symbol_table* symtab) {
+    symtab->length = 0;
+    symtab->initialized = 145;
 }
 
 // returns index of matching symbol, -1 if not found
