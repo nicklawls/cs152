@@ -197,7 +197,7 @@ int main (const int argc, const char** argv) {
       }
   }
   symtab_init(symtab);
-  printf("%i %i", symtab.initialized, symtab.length)
+  printf("%i %i", symtab.initialized, symtab.length);
 
   yyparse();
   return 0;
