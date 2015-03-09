@@ -163,7 +163,7 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 
 var : IDENT L_BRACKET expression R_BRACKET {
         $<stringval>$ = $1;
-        $<intval>$ = $3 
+        $<intval>$ = $3;
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
