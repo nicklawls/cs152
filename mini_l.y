@@ -164,8 +164,9 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 
 var : IDENT L_BRACKET expression R_BRACKET {
         // check for symbol in st
-        snprintf($$,strlen($$), "%s,%i", $1, $3);
-        if (out) {printf($$);}
+        char buff[100]
+        snprintf(buff,100, "%s,%i\n", $1, $3);
+        if (out) {printf(buff);}
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
@@ -194,9 +195,9 @@ int main (const int argc, const char** argv) {
         exit(1);
       }
   }
-  symtab_init(&symtab);
-  printf("%i\n", symtab.initialized);
-  printf("%i\n", symtab.length);
+  // symtab_init(&symtab);
+  // printf("%i\n", symtab.initialized);
+  // printf("%i\n", symtab.length);
 
   yyparse();
   return 0;
