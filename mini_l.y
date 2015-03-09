@@ -168,7 +168,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
     }
 
     | IDENT {
-        $$ = $<stringval>; 
+        $$ = $1; 
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
