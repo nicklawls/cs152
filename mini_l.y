@@ -167,13 +167,13 @@ var : IDENT L_BRACKET expression R_BRACKET {
         char buff[15];
         snprintf(buff,15, "%s,%i", $1, $3);
         $$ = strdup(buff);
-        if (out) {printf("s%\n",$$);}
+        if (out) {printf("%s\n",$$);}
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
         $$ = strdup($1); 
-        if (out) {printf("%s",$$);}
+        if (out) {printf("%s\n",$$);}
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
