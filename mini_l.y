@@ -7,7 +7,7 @@
   extern int yycolumno;
   FILE* yyin;
   int verbose = 0;
-  int stdout = 1;  
+  int out = 1;  
 %}
 
 %union{
@@ -165,7 +165,7 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 var : IDENT L_BRACKET expression R_BRACKET {
         // check for symbol in st
         snprintf($$,strlen($$), "%s,%i", $1, $3);
-        if (stdout) {printf($$);}
+        if (out) {printf($$);}
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
