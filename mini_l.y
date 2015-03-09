@@ -169,8 +169,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
         printf("A\n");
         $<stringval>$ = strdup($1);
         $<intval>$ = $3;
-        printf("B\n");
-        printf("var -> %s[%i]\n", $<stringval>$, $<intval>$);
+        printf("var -> %s\n", $<stringval>$);
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
