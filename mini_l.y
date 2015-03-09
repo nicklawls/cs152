@@ -164,8 +164,8 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 
 var : IDENT L_BRACKET expression R_BRACKET {
         // check for symbol in st
-        char buff[100];
-        snprintf(buff,100, "%s,%i\n", $1, $3);
+        char buff[15];
+        snprintf(buff,15, "%s,%i\n", $1, $3);
         $$ = strdup(buff);
         if (out) {printf($$);}
         if (verbose) {printf("var -> ident[expression]\n");}
@@ -173,6 +173,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
 
     | IDENT {
         $$ = strdup($1); 
+        if (out) {printf($$);}
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
