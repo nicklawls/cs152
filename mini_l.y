@@ -37,10 +37,10 @@
 
 
 %type <intval> expression
-%type <intval> var term termA
+%type <intval> term termA
 %type <intval> m_exp relation_exp relation_expA
 %type <intval> relation_and_exp bool_exp
-%type <stringval> comp statement var_list stmt_list
+%type <stringval> comp statement var_list stmt_list var
 %type <stringval> block decl_list id_list
 %type <stringval> Program declaration
 
@@ -162,13 +162,13 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-        $<stringval>$ = $1;
+        $<stringval>$ = strdup($1);
         $<intval>$ = $3;
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
-        $$ = $1; 
+        $$ = strdup($1); 
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
