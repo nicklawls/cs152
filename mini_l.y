@@ -7,7 +7,6 @@
   extern int yycolumno;
   FILE* yyin;
   int verbose = 0;
-  int out = 1;  
 %}
 
 %union{
@@ -167,19 +166,20 @@ var : IDENT L_BRACKET expression R_BRACKET {
         char buff[15];
         snprintf(buff,15, "%s,%i", $1, $3);
         $$ = strdup(buff);
-        if (out) {printf("%s\n",$$);}
+        printf("%s\n",$$);
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
+        // check for symbol in st
         $$ = strdup($1); 
-        if (out) {printf("%s\n",$$);}
+        printf("%s\n",$$);
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
 
 term : SUB termA {$$ = -1 * $2;  if (verbose) {printf("term -> SUB term'\n");}}
-     | termA {$$ = $1;  if (verbose) {printf("term -> term'\n");}}
+     | termA {$$.intval = $1;  if (verbose) {printf("term -> term'\n");}}
      ;
 
 termA : var {$$ = 15; if (verbose) {printf("term' -> var \n");}}
