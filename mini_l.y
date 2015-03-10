@@ -14,13 +14,13 @@
 	int intval;
   char* stringval;
   struct expr {
-    char* place[16];
-    char* code[100];
+    char** place;
+    char** code;
   } expr;
   struct stmt {
-    char* begin;
-    char* code;
-    char* after;
+    char** begin;
+    char** code;
+    char** after;
   } stmt;
 }
 
@@ -258,7 +258,7 @@ term : SUB termA {
      ;
 
 termA : var {
-          newtemp($$.place)
+          newtemp($$.place);
           gen3($$.code, "=", $$.place, $1); 
           if (verbose) {printf("term' -> var \n");}
       }
