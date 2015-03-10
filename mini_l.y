@@ -217,12 +217,12 @@ relation_exp : NOT relation_expA {
                }
              ;
 
-comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
-     | NEQ {$$ = "!="; if (verbose) {printf("comp -> <>\n");}}
-     | LTE {$$ = "<="; if (verbose) {printf("comp -> <=\n");}}
-     | GTE {$$ = ">="; if (verbose) {printf("comp -> >=\n");}}
-     | LT  {$$ = "<"; if (verbose) {printf("comp-> < \n");}}
-     | GT  {$$ = ">"; if (verbose) {printf("comp-> > \n");}}
+comp : EQ  {strcpy($$, "=="); if (verbose) {printf("comp -> ==\n");}}
+     | NEQ {strcpy($$, "!="); if (verbose) {printf("comp -> <>\n");}}
+     | LTE {strcpy($$, "<="); if (verbose) {printf("comp -> <=\n");}}
+     | GTE {strcpy($$, ">="); if (verbose) {printf("comp -> >=\n");}}
+     | LT  {strcpy($$, "<"); if (verbose) {printf("comp-> < \n");}}
+     | GT  {strcpy($$, ">"); if (verbose) {printf("comp-> > \n");}}
      ;
 
 m_exp : term { 
