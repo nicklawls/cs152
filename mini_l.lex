@@ -123,7 +123,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 		} 
 	} 
 	
-	yylval.stringval = strdup(yytext); // likely causing a memory leak
+	yylval.strval = strdup(yytext); // likely causing a memory leak
 	return IDENT;
 }
 
