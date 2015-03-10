@@ -241,9 +241,9 @@ var : IDENT L_BRACKET expression R_BRACKET {
     ;
 
 term : SUB termA {
-        strcpy($$.place, $1.place);
+        strcpy($$.place, $2.place);
         // code to calculate the term plus `concat` sign switch
-        strcpy($$.code, $1.code);
+        strcpy($$.code, $2.code);
         char signswitch[16];
         gen4i(signswitch, "*", $$.place, $$.place, -1);
         strcat($$.code, signswitch);
@@ -251,7 +251,8 @@ term : SUB termA {
         if (verbose) {printf("term -> SUB term'\n");}
      }
      | termA {
-        $$ = $1;  
+        strcpy($$.place, $1.place);
+        strcpy($$.code, $1.code);
         if (verbose) {printf("term -> term'\n");}
      }
      ;
