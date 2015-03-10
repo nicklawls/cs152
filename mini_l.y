@@ -2,6 +2,7 @@
 	#include <stdio.h>
 	#include <stdlib.h>
   #include "symbol_table.h"
+  #include "codegen.h"
 	void yyerror(const char *message);
   extern int yylineno;
   extern int yycolumno;
@@ -11,14 +12,16 @@
 
 %union{
 	int intval;
-  int* intarrayval;
   char* stringval;
-  struct quad {
-    char* op;
-    char* dst;
-    char* src_1;
-    char* src_2;
-  } quad;
+  struct expr {
+    char* place;
+    char* code;
+  } expr;
+  struct stmt {
+    char* begin;
+    char* code;
+    char* after;
+  }
 }
 
 
@@ -40,13 +43,14 @@
 
 
 
-%type <intval> expression
-%type <intval> term termA
-%type <intval> m_exp relation_exp relation_expA
-%type <intval> relation_and_exp bool_exp
-%type <stringval> comp statement var_list stmt_list var
-%type <stringval> block decl_list id_list
-%type <stringval> Program declaration
+%type <expr> expression
+%type <expr> term termA
+%type <expr> m_exp relation_exp relation_expA
+%type <expr> relation_and_exp bool_exp
+%type <stringval> comp var var_list
+%type <stmt> statement stmt_list
+%type <stmt> block decl_list id_list
+%type <stmt> Program declaration
 
 
 
@@ -166,29 +170,39 @@ expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-        // check for symbol in st
-        char buff[15];
-        snprintf(buff,15, "%s,%i", $1, $3);
-        $$ = strdup(buff);
+       
         printf("%s\n",$$);
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
-        // check for symbol in st
-        $$ = strdup($1); 
+       
         printf("%s\n",$$);
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
 
-term : SUB termA {$$ = -1 * $2;  if (verbose) {printf("term -> SUB term'\n");}}
-     | termA {$$.intval = $1;  if (verbose) {printf("term -> term'\n");}}
+term : SUB termA {
+      
+        if (verbose) {printf("term -> SUB term'\n");}}
+     | termA {$$ = $1;  if (verbose) {printf("term -> term'\n");}}
      ;
 
-termA : var {$$ = 15; if (verbose) {printf("term' -> var \n");}}
-      | NUMBER {$$ = $1; if (verbose) {printf("term' -> NUMBER \n");}}
-      | L_PAREN expression R_PAREN {$$ = $2; if (verbose) {printf("term' -> (expression)\n");}}
+termA : var {
+          if (verbose) {printf("term' -> var \n");}}
+      | NUMBER {
+          char* dst[8];
+          int imm = $1;
+          newtmp(dst);
+          $$.place = strdup(dst);
+          gen3i($$.code, "=", dst, imm);
+
+          if (verbose) {printf("term' -> NUMBER \n");}
+      }
+      | L_PAREN expression R_PAREN {
+          $$.place = $2.place;
+          $$.code = $2.code;
+          if (verbose) {printf("term' -> (expression)\n");}}
       ;
 
 %%
