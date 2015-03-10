@@ -123,7 +123,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 		} 
 	} 
 	
-	strcpy(yylval.strval, yytext); // changed from strdup, might have unintended consequences
+	yylval.strval = strdup(yytext); // changed from strdup, might have unintended consequences
 	return IDENT;
 }
 

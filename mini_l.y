@@ -12,7 +12,7 @@
 
 %union{
 	int intval;
-  char strval[256];
+  char* strval;
   struct expr {
     char place[8];
     char code[16384];
