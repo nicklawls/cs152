@@ -19,21 +19,17 @@ void gen2(char* buff, char* op, char* dst) {
     snprintf(buff, 64, "%s %s\n", op, dst);
 }
 
-static char tmpname = 't';
 static int tmpcount = 0;
 
 static int labelcount = 0;
 
 void newtemp(char* dst) {
-    char temp[16];
-
     do {
         ++tmpcount;
-        sprintf(temp, "%c%i", tmpname,tmpcount);
-    } while(symtab_get(temp));
+        sprintf(dst, "t%i",tmpcount);
+    } while(symtab_get(dst));
 
-    symtab_put_int(temp, 0);
-    sprintf(dst, "%s", temp);
+    symtab_put_int(dst, 0);
 }
 
 void newlabel(char* dst) {

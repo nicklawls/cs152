@@ -194,7 +194,7 @@ termA : var {
           int imm = $1;
           newtemp($$.place);
           gen3i($$.code, "=", $$.place, imm);
-
+          printf("%s", $$.code);
           if (verbose) {printf("term' -> NUMBER \n");}
       }
       | L_PAREN expression R_PAREN {
