@@ -137,7 +137,7 @@ bool_exp : relation_and_exp {
             strcpy($$.place, $1.place);
             strcpy($$.code, $1.code);
             if (verbose) {printf("bool_exp -> relation_and_exp\n");}
-           }:
+           }
          | bool_exp OR relation_and_exp {
             newtemp($$.place);
 
