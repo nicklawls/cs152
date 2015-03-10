@@ -14,8 +14,8 @@
 	int intval;
   char* stringval;
   struct expr {
-    char* place;
-    char* code;
+    char* place[16];
+    char* code[100];
   } expr;
   struct stmt {
     char* begin;
@@ -170,26 +170,39 @@ expression : m_exp { if (verbose) {printf("expression -> multiplicative_exp\n");
 /* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-       
-        printf("%s\n",$$);
+        sprintf($$, "%s,%s", $1, $3.place);
+        // printf("%s\n",$$);
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
-       
+        strcpy($$, $1);
         printf("%s\n",$$);
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
 
 term : SUB termA {
-      
-        if (verbose) {printf("term -> SUB term'\n");}}
-     | termA {$$ = $1;  if (verbose) {printf("term -> term'\n");}}
+        strcpy($$.place, $1.place);
+        // code to calculate the term plus `concat` sign switch
+        strcpy($$.code, $1.code);
+        char signswitch[16];
+        gen4i(signswitch, "*", $$.place, $$.place, -1);
+        strcat($$.code, signswitch);
+
+        if (verbose) {printf("term -> SUB term'\n");}
+     }
+     | termA {
+        $$ = $1;  
+        if (verbose) {printf("term -> term'\n");}
+     }
      ;
 
 termA : var {
-          if (verbose) {printf("term' -> var \n");}}
+          newtemp($$.place)
+          gen3($$.code, "=", $$.place, $1); 
+          if (verbose) {printf("term' -> var \n");}
+      }
       | NUMBER {
           int imm = $1;
           newtemp($$.place);
@@ -198,9 +211,10 @@ termA : var {
           if (verbose) {printf("term' -> NUMBER \n");}
       }
       | L_PAREN expression R_PAREN {
-          $$.place = $2.place;
-          $$.code = $2.code;
-          if (verbose) {printf("term' -> (expression)\n");}}
+          strcpy($$.place, $2.place);
+          strcpy($$.code,$2.code);
+          if (verbose) {printf("term' -> (expression)\n");}
+      }
       ;
 
 %%
