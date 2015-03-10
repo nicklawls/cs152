@@ -8,7 +8,7 @@
   extern int yycolumno;
   FILE* yyin;
   int verbose = 0;
-  % }
+%}
 
 %union{
 	int intval;
@@ -22,7 +22,7 @@
     char code[16384];
     char after[256];
     } stmt; 
- }
+}
 
 
 %error-verbose
