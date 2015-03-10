@@ -192,7 +192,7 @@ termA : var {
           if (verbose) {printf("term' -> var \n");}}
       | NUMBER {
           int imm = $1;
-          newtmp($$.place);
+          newtemp($$.place);
           gen3i($$.code, "=", $$.place, imm);
 
           if (verbose) {printf("term' -> NUMBER \n");}
