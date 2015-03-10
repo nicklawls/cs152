@@ -33,7 +33,7 @@
 %error-verbose
 %start input
 %token <intval> NUMBER
-%token <stringval> IDENT
+%token <strval> IDENT
 %token SEMICOLON BEGIN_PROGRAM END_PROGRAM ASSIGN L_PAREN R_PAREN COLON
 %token INTEGER PROGRAM L_BRACKET R_BRACKET
 %token ARRAY OF IF THEN ENDIF ELSE ELSEIF WHILE DO BEGINLOOP BREAK CONTINUE ENDLOOP
@@ -137,7 +137,7 @@ bool_exp : relation_and_exp {
             strcpy($$.place, $1.place);
             strcpy($$.code, $1.code);
             if (verbose) {printf("bool_exp -> relation_and_exp\n");}
-           }
+           }:
          | bool_exp OR relation_and_exp {
             newtemp($$.place);
 
