@@ -160,7 +160,7 @@ comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
      ;
 
 m_exp : term { 
-          strcpy($$.place, $1.place);
+          strncpy($$.place, $1.place, 10);
           strcpy($$.code, $1.code);
           if (verbose) {printf("multiplicative_exp -> term\n");}
       }
