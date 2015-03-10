@@ -14,13 +14,13 @@
 	int intval;
   char* stringval;
   struct expr {
-    char** place;
-    char** code;
+    char place[10];
+    char code[256];
   } expr;
   struct stmt {
-    char** begin;
-    char** code;
-    char** after;
+    char begin;
+    char code;
+    char after;
   } stmt;
 }
 
@@ -160,7 +160,7 @@ comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
      ;
 
 m_exp : term { 
-          strncpy($$.place, $1.place, 10);
+          strcpy($$.place, $1.place);
           strcpy($$.code, $1.code);
           if (verbose) {printf("multiplicative_exp -> term\n");}
       }
