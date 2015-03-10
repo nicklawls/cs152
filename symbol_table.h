@@ -1,3 +1,6 @@
+#IFNDEF SYMBOL_TABLE_H
+#DEFINE SYMBOL_TABLE_H
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,3 +94,4 @@ void symtab_put_array(char* name, int values[], size_t vals_length ) {
     }   
 }
 
+#ENDIF SYMBOL_TABLE_H
