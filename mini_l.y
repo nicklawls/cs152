@@ -53,8 +53,8 @@
 %type <expr> m_exp relation_exp relation_expA
 %type <expr> relation_and_exp bool_exp 
 %type <strval> comp var  
-%type <strlist> var_list stmt_list decl_list id_list
-%type <stmt> statement 
+%type <strlist> var_list decl_list id_list
+%type <stmt> statement stmt_list
 %type <stmt> block  
 %type <stmt> Program declaration
 
@@ -367,9 +367,9 @@ int main (const int argc, const char** argv) {
         exit(1);
       }
     }
-  // symtab_init(&symtab);
-  // printf("%i\n", symtab.initialized);
-  // printf("%i\n", symtab.length);
+  symtab_init();
+  printf("%i\n", symtab.initialized);
+  printf("%i\n", symtab.length);
 
   yyparse();
   return 0; 
