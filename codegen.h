@@ -27,13 +27,13 @@ static int tmpcount = 0;
 
 static int labelcount = 0;
 
-void newtemp(char* dst) {
+void newtemp(char* dst, char type) {
     do {
         ++tmpcount;
         sprintf(dst, "t%i",tmpcount);
     } while(symtab_get(dst));
 
-    symtab_put_int(dst, 0);
+    symtab_put(dst, type);
 }
 
 void newlabel(char* dst) {

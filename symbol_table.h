@@ -7,14 +7,11 @@
 
 struct symbol {
     char* name;
-    union {
-        int intval;
-        int intarrval[1024];
-    } value;
+    int type; // 0 for int, 1 for array
 };
 
 struct symbol_table {
-    struct symbol st[256];
+    struct symbol st[1024];
     int length;
     int initialized;
 } symtab;
@@ -24,6 +21,10 @@ void symtab_init(){
     symtab.length = 0;
     symtab.initialized = 1;
 }
+
+
+
+
 
 // returns index of matching symbol, -1 if not found
 int symtab_get(char* key) { 
@@ -44,21 +45,29 @@ int symtab_get(char* key) {
     return -1;
 }
 
+
+// returns type of symtab entry specified by key, or -1 if not present
+int symtab_entry_is_int(int index) { 
+    return symtab.st[index].type;
+}
+
+
 // insert functions will increment the length of the symbol table if not present
 // and will append at the original location if it is
 
-void symtab_put_int(char* name, int value ) {
+void symtab_put(char* name, int type ) {
     if (symtab.initialized) {
-        struct symbol newsym;
-        newsym.name = strdup(name);
-        newsym.value.intval = value;
         
         int index = symtab_get(name);
         int not_present = !index;
-        if (not_present) {       
-            symtab.st[symtab.length++] = newsym;
+        
+        if (not_present) {
+            symtab.length++;       
+            strcpy(symtab.st[symtab.length].name, name);
+            symtab.st[symtab.length].type = type;
         } else {
-            symtab.st[index] = newsym;
+            strcpy(symtab.st[index].name, name);
+            symtab.st[index].type = type;
         }
 
     } else {
@@ -68,30 +77,6 @@ void symtab_put_int(char* name, int value ) {
 }
 
 // should just insert a single int at a single array index, will be called inside for loops
-void symtab_put_array(char* name, int values[], size_t vals_length ) {
-    if (symtab.initialized) {
-        struct symbol newsym;
-        newsym.name = strdup(name);
-        int i = 0;
-        while ( i < vals_length) {    
-            newsym.value.intarrval[i] = values[i];
-            ++i;
-        }
-        
-        int index = symtab_get(name);
-        int not_present = !index;
-        
-        if (not_present) {
-            symtab.st[symtab.length++] = newsym;
-        } else {
-            symtab.st[index] = newsym;
-        }
 
-        symtab.st[symtab.length++] = newsym;
-    } else {
-        printf("symbol table uninitialized\n");
-        exit(1);
-    }   
-}
 
 #endif

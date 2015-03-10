@@ -12,7 +12,7 @@
 
 %union{
 	int intval;
-  char* stringval;
+  char* strval;
   struct expr {
     char place[8];
     char code[16384];
@@ -22,6 +22,11 @@
     char code[16384];
     char after[256];
     } stmt; 
+  struct strlist {
+    char list[256][256];
+    int length;
+  }
+
 }
 
 
@@ -46,10 +51,11 @@
 %type <expr> expression
 %type <expr> term termA
 %type <expr> m_exp relation_exp relation_expA
-%type <expr> relation_and_exp bool_exp
-%type <stringval> comp var var_list
-%type <stmt> statement stmt_list
-%type <stmt> block decl_list id_list
+%type <expr> relation_and_exp bool_exp 
+%type <strval> comp var  
+%type <strlist> var_list stmt_list decl_list id_list
+%type <stmt> statement 
+%type <stmt> block  
 %type <stmt> Program declaration
 
 
@@ -288,12 +294,13 @@ expression : m_exp {
 
 
 var : IDENT L_BRACKET expression R_BRACKET {
+        // name and type will already be in symtab, pass (name,index) along as string
         sprintf($$, "%s,%s", $1, $3.place); // id, index
-        // printf("%s\n",$$);
         if (verbose) {printf("var -> ident[expression]\n");}
       }
 
     | IDENT {
+        // name and type will already be in symtab, pass name along
         strcpy($$, $1);
         printf("%s\n",$$); // id
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
@@ -317,9 +324,23 @@ term : SUB termA {
        }
      ;
 
-termA : var {
-          newtemp($$.place);
-          gen3($$.code, "=", $$.place, $1); 
+termA : var { // when var becomes a term, we only want the value currently in it
+          
+          // handle both the int and array cases
+          if (int index = symtab_get($$)) {
+            if (symtab_entry_is_int(index)) {
+              // avoid making new temp since variable already declared
+              strcpy($$.place,$1);
+              strcpy($$.code,"");
+            } else {
+              // newtemp to extract value at index
+              newtemp($$.place);
+              gen3($$.code, "=[]", $$.place, $1 ) // $1 has "name,index"
+            }
+          } else {
+            // handle error
+          }
+
           if (verbose) {printf("term' -> var \n");}
         }
       | NUMBER {
