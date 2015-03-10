@@ -325,7 +325,7 @@ term : SUB termA {
      ;
 
 termA : var { // when var becomes a term, we only want the value currently in it
-          int index = symtab_get($$)
+          int index = symtab_get($$);
           // handle both the int and array cases
           if (index) {
             if (symtab_entry_is_int(index)) {
