@@ -21,7 +21,7 @@
     char* begin;
     char* code;
     char* after;
-  }
+  }stmt;
 }
 
 
