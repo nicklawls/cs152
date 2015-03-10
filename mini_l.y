@@ -352,8 +352,8 @@ int main (const int argc, const char** argv) {
 
   yyparse();
   return 0; 
- }
+}
 
 void yyerror(const char* msg) {
     printf("** Line %d, position %d: %s\n", yylineno, yycolumno, msg);  
- }
+}
