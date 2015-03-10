@@ -325,9 +325,9 @@ term : SUB termA {
      ;
 
 termA : var { // when var becomes a term, we only want the value currently in it
-          
+          int index = symtab_get($$)
           // handle both the int and array cases
-          if (int index = symtab_get($$)) {
+          if (index) {
             if (symtab_entry_is_int(index)) {
               // avoid making new temp since variable already declared
               strcpy($$.place,$1);
@@ -335,7 +335,7 @@ termA : var { // when var becomes a term, we only want the value currently in it
             } else {
               // newtemp to extract value at index
               newtemp($$.place);
-              gen3($$.code, "=[]", $$.place, $1 ) // $1 has "name,index"
+              gen3($$.code, "=[]", $$.place, $1 ); // $1 has "name,index"
             }
           } else {
             // handle error
