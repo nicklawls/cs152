@@ -21,7 +21,7 @@
     char* begin;
     char* code;
     char* after;
-  }stmt;
+  } stmt;
 }
 
 
@@ -125,25 +125,25 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
 
 bool_exp : relation_and_exp {$$ = $1; if (verbose) {printf("bool_exp -> relation_and_exp\n");}}
          | bool_exp OR relation_and_exp {
-            $$ = $1 || $3; 
+            
             if (verbose) {printf("bool_exp -> bool_exp OR relation_and_exp\n");}
          }
          ;
 
 relation_and_exp : relation_exp {$$ = $1; if (verbose) {printf("relation_and_exp -> relation_exp\n");}}
                  | relation_and_exp AND relation_exp {
-                    $$ = $1 && $3; 
+                    
                     if (verbose) {printf("relation_and_exp -> relation_and_exp AND relation_exp\n");}
                  }
                  ;
 
 relation_expA : expression comp expression {if (verbose) {printf("relation_exp' -> expression comp expression\n");}}
-              | TRUE {$$ = 1; if (verbose) {printf("relation_exp' -> TRUE\n");}}
-              | FALSE {$$ = 0; if (verbose) {printf("relation_exp' -> FALSE\n");}}
-              | L_PAREN bool_exp R_PAREN {$$ = $2; if (verbose) {printf("relation_exp' -> (bool_exp)\n");}}
+              | TRUE {if (verbose) {printf("relation_exp' -> TRUE\n");}}
+              | FALSE { if (verbose) {printf("relation_exp' -> FALSE\n");}}
+              | L_PAREN bool_exp R_PAREN { if (verbose) {printf("relation_exp' -> (bool_exp)\n");}}
               ;
 
-relation_exp : NOT relation_expA {$$ = $2 >= 1 ? 0 : 1; if (verbose) {printf("relation_exp -> not relation_exp'\n");}}
+relation_exp : NOT relation_expA { if (verbose) {printf("relation_exp -> not relation_exp'\n");}}
              | relation_expA {if (verbose) {printf("relation_exp -> relation_exp'\n");}}
              ;
 
@@ -155,15 +155,15 @@ comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
      | GT  {$$ = ">"; if (verbose) {printf("comp-> > \n");}}
      ;
 
-m_exp : term {$$ = $1; if (verbose) {printf("multiplicative_exp -> term\n");}}
-      | m_exp MULT term {$$ = $1 * $3; if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}}
-      | m_exp DIV term {/*$$ = $1 / $3*/; if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}} // willdly unsafe
-      | m_exp MOD term {$$ = $1 % $3; if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}}
+m_exp : term { if (verbose) {printf("multiplicative_exp -> term\n");}}
+      | m_exp MULT term { if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}}
+      | m_exp DIV term { if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}} // willdly unsafe
+      | m_exp MOD term { if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}}
       ;
 
-expression : m_exp {$$ = $1; if (verbose) {printf("expression -> multiplicative_exp\n");}}
-           | expression ADD m_exp {$$ = ($1 + $3); if (verbose) {printf("expression -> expression + multiplicative_exp\n");}}
-           | expression SUB m_exp {$$ = ($1 - $3); if (verbose) {printf("expression -> expression - multiplicative_exp\n");}}
+expression : m_exp { if (verbose) {printf("expression -> multiplicative_exp\n");}}
+           | expression ADD m_exp {if (verbose) {printf("expression -> expression + multiplicative_exp\n");}}
+           | expression SUB m_exp {if (verbose) {printf("expression -> expression - multiplicative_exp\n");}}
            ;
 
 /* will need symbol table lookups on $$ for this one */
@@ -191,11 +191,9 @@ term : SUB termA {
 termA : var {
           if (verbose) {printf("term' -> var \n");}}
       | NUMBER {
-          char* dst[8];
           int imm = $1;
-          newtmp(dst);
-          $$.place = strdup(dst);
-          gen3i($$.code, "=", dst, imm);
+          newtmp($$.place);
+          gen3i($$.code, "=", $$.place, imm);
 
           if (verbose) {printf("term' -> NUMBER \n");}
       }
