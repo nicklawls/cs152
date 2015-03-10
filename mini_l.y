@@ -25,7 +25,7 @@
   struct strlist {
     char list[256][256];
     int length;
-  }
+  } strlist;
 
 }
 
