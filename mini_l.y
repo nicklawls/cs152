@@ -8,21 +8,21 @@
   extern int yycolumno;
   FILE* yyin;
   int verbose = 0;
-%}
+  % }
 
 %union{
 	int intval;
   char* stringval;
   struct expr {
-    char place[10];
-    char code[256];
-  } expr;
+    char place[8];
+    char code[16384];
+    } expr;
   struct stmt {
-    char begin;
-    char code;
-    char after;
-  } stmt;
-}
+    char begin[16];
+    char code[16384];
+    char after[256];
+    } stmt; 
+ }
 
 
 %error-verbose
@@ -59,12 +59,12 @@ input : Program {
           // iterate over symbol table and generate init statements, save into buffer
           // concat buffer with Program.code
           if (verbose) {printf("input -> Program\n");}
-      }
+        }
       ;
 
 Program : PROGRAM IDENT SEMICOLON block END_PROGRAM {
             if (verbose) {printf("Program -> program ident ; block endprogram\n");}
-        }
+          }
         ;
 
 block : decl_list BEGIN_PROGRAM stmt_list {if (verbose) {printf("block -> decl_list beginprogram stmt_list\n");}}
@@ -77,7 +77,7 @@ decl_list : declaration SEMICOLON {if (verbose) {printf("decl_list -> declaratio
 declaration : id_list COLON INTEGER {if (verbose) {printf("declaration -> id_list : integer\n");}}
             | id_list COLON ARRAY L_BRACKET NUMBER R_BRACKET OF INTEGER {
                 if (verbose) {printf("declaration -> id_list : array [number] of integer\n");}
-            }
+              }
             ;
 
 id_list : IDENT {if (verbose) {printf("id_list -> ident\n");}}
@@ -87,7 +87,7 @@ id_list : IDENT {if (verbose) {printf("id_list -> ident\n");}}
 elif_list : ELSEIF bool_exp stmt_list {if (verbose) {printf("elif_list -> elseif bool_exp stmt_list\n");}}
           | ELSEIF bool_exp stmt_list elif_list {
                 if (verbose) {printf("elif_list -> elseif bool_exp stmt_list elif_list\n");}
-          }
+            }
           ;
 
 stmt_list : statement SEMICOLON {if (verbose) {printf("stmt_list -> statement;\n");}}
@@ -105,50 +105,110 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
           | WRITE var_list {if (verbose) {printf("statement -> write var_list\n");}}
           | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
                 if (verbose) {printf("statement -> do beginloop stmt_list endloop while bool_exp\n");}
-          }
+            }
           | WHILE bool_exp BEGINLOOP stmt_list ENDLOOP {
                 if (verbose) {printf("statement -> while bool_exp beginloop stmt_list endloop\n");}
-          }
+            }
           | var ASSIGN expression {if (verbose) {printf("statement -> var := expression\n");}}
           | var ASSIGN bool_exp QUESTION expression COLON expression {
                 if (verbose) {printf("statement -> var := bool_exp ? expression : expression\n");}
-          }
+            }
           | IF bool_exp THEN stmt_list ENDIF {
                 if (verbose) {printf("statement -> if bool_exp then stmt_list endif\n");}
-          }
+            }
           | IF bool_exp THEN stmt_list ELSE stmt_list ENDIF {
                 if (verbose) {printf("statement -> if bool_exp then stmt_list else stmt_list endif\n");}
-          }
+            }
           | IF bool_exp THEN stmt_list elif_list ENDIF {
                 if (verbose) {printf("statement -> if bool_exp then stmt_list elif_list endif\n");}
-          }
+            }
           | IF bool_exp THEN stmt_list elif_list ELSE stmt_list ENDIF {
                 if (verbose) {printf("statement -> if bool_exp then stmt_list elif_list else stmt_list endif\n");}
-          }
+            }
           ;
 
-bool_exp : relation_and_exp {$$ = $1; if (verbose) {printf("bool_exp -> relation_and_exp\n");}}
+bool_exp : relation_and_exp {
+            strcpy($$.place, $1.place);
+            strcpy($$.code, $1.code);
+            if (verbose) {printf("bool_exp -> relation_and_exp\n");}
+           }
          | bool_exp OR relation_and_exp {
-            
+            newtemp($$.place);
+
+            char quad[16];
+            gen4(quad, "||", $$.place, $1.place, $3.place);
+
+            strcpy($$.code, $1.code);
+            strcat($$.code, $3.code);
+            strcat($$.code, quad);
             if (verbose) {printf("bool_exp -> bool_exp OR relation_and_exp\n");}
-         }
+           }
          ;
 
-relation_and_exp : relation_exp {$$ = $1; if (verbose) {printf("relation_and_exp -> relation_exp\n");}}
+relation_and_exp : relation_exp {
+                    strcpy($$.place, $1.place);
+                    strcpy($$.code, $1.code);
+                    if (verbose) {printf("relation_and_exp -> relation_exp\n");}
+                   }
                  | relation_and_exp AND relation_exp {
-                    
+                    newtemp($$.place);
+
+                    char quad[16];
+                    gen4(quad, "&&", $$.place, $1.place, $3.place);
+
+                    strcpy($$.code, $1.code);
+                    strcat($$.code, $3.code);
+                    strcat($$.code, quad);
+
                     if (verbose) {printf("relation_and_exp -> relation_and_exp AND relation_exp\n");}
-                 }
+                   }
                  ;
 
-relation_expA : expression comp expression {if (verbose) {printf("relation_exp' -> expression comp expression\n");}}
-              | TRUE {if (verbose) {printf("relation_exp' -> TRUE\n");}}
-              | FALSE { if (verbose) {printf("relation_exp' -> FALSE\n");}}
-              | L_PAREN bool_exp R_PAREN { if (verbose) {printf("relation_exp' -> (bool_exp)\n");}}
+relation_expA : expression comp expression {
+                  newtemp($$.place);
+
+                  char quad[16];
+                  gen4(quad, $2, $$.place, $1.place, $3.place);
+
+                  strcpy($$.code, $1.code);
+                  strcat($$.code, $3.code);
+                  strcat($$.code, quad);
+
+                  if (verbose) {printf("relation_exp' -> expression comp expression\n");}
+                }
+              | TRUE {
+                  newtemp($$.place);
+                  gen3i($$.code, "=", $$.place, 1);
+                  if (verbose) {printf("relation_exp' -> TRUE\n");}
+                }
+              | FALSE { 
+                newtemp($$.place);
+                gen3i($$.code, "=", $$.place, 0);
+                if (verbose) {printf("relation_exp' -> FALSE\n");}
+              }
+              | L_PAREN bool_exp R_PAREN { 
+                  strcpy($$.place, $2.place);
+                  strcpy($$.code, $2.code);
+                  if (verbose) {printf("relation_exp' -> (bool_exp)\n");}
+                }
               ;
 
-relation_exp : NOT relation_expA { if (verbose) {printf("relation_exp -> not relation_exp'\n");}}
-             | relation_expA {if (verbose) {printf("relation_exp -> relation_exp'\n");}}
+relation_exp : NOT relation_expA { 
+                strcpy($$.place, $2.place);
+                strcpy($$.code, $2.code);
+                
+                char signswitch[16];
+                gen3(signswitch, "!", $$.place, $$.place);
+                
+                strcat($$.code, signswitch);
+
+                if (verbose) {printf("relation_exp -> not relation_exp'\n");}
+               }
+             | relation_expA {
+                strcpy($$.place, $1.place);
+                strcpy($$.code, $1.code);
+                if (verbose) {printf("relation_exp -> relation_exp'\n");}
+               }
              ;
 
 comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
@@ -163,7 +223,7 @@ m_exp : term {
           strcpy($$.place, $1.place);
           strcpy($$.code, $1.code);
           if (verbose) {printf("multiplicative_exp -> term\n");}
-      }
+        }
       | m_exp MULT term { 
           newtemp($$.place);
           char quad[16];
@@ -174,7 +234,7 @@ m_exp : term {
           strcat($$.code, quad);
 
           if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}
-      }
+        }
       | m_exp DIV term { 
           newtemp($$.place);
           char quad[16];
@@ -184,7 +244,7 @@ m_exp : term {
           strcat($$.code, $3.code);
           strcat($$.code, quad);
           if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}
-      }
+        }
       | m_exp MOD term { 
           newtemp($$.place);
           char quad[16];
@@ -194,14 +254,14 @@ m_exp : term {
           strcat($$.code, $3.code);
           strcat($$.code, quad);
           if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}
-      }
+        }
       ;
 
 expression : m_exp { 
               strcpy($$.place, $1.place);
               strcpy($$.code, $1.code);
               if (verbose) {printf("expression -> multiplicative_exp\n");}
-           }
+             }
            | expression ADD m_exp {
               newtemp($$.place);
 
@@ -212,18 +272,18 @@ expression : m_exp {
               strcat($$.code, $3.code);
               strcat($$.code, quad);
               if (verbose) {printf("expression -> expression + multiplicative_exp\n");}
-           }
+             }
            | expression SUB m_exp {
-              newtemp($$.place);
-              
-              char quad[16];
-              gen4(quad, "-", $$.place, $1.place, $3.place); 
+                newtemp($$.place);
+                
+                char quad[16];
+                gen4(quad, "-", $$.place, $1.place, $3.place); 
 
-              strcpy($$.code, $1.code);
-              strcat($$.code, $3.code);
-              strcat($$.code, quad);
-              if (verbose) {printf("expression -> expression - multiplicative_exp\n");}
-           }
+                strcpy($$.code, $1.code);
+                strcat($$.code, $3.code);
+                strcat($$.code, quad);
+                if (verbose) {printf("expression -> expression - multiplicative_exp\n");}
+             }
            ;
 
 
@@ -231,49 +291,49 @@ var : IDENT L_BRACKET expression R_BRACKET {
         sprintf($$, "%s,%s", $1, $3.place); // id, index
         // printf("%s\n",$$);
         if (verbose) {printf("var -> ident[expression]\n");}
-    }
+      }
 
     | IDENT {
         strcpy($$, $1);
         printf("%s\n",$$); // id
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
-    }
+      }
     ;
 
 term : SUB termA {
-        strcpy($$.place, $2.place);
-        // code to calculate the term plus `concat` sign switch
-        strcpy($$.code, $2.code);
-        char signswitch[16];
-        gen4i(signswitch, "*", $$.place, $$.place, -1);
-        strcat($$.code, signswitch);
+          strcpy($$.place, $2.place);
+          // code to calculate the term plus `concat` sign switch
+          strcpy($$.code, $2.code);
+          char signswitch[16];
+          gen4i(signswitch, "*", $$.place, $$.place, -1);
+          strcat($$.code, signswitch);
 
-        if (verbose) {printf("term -> SUB term'\n");}
-     }
+          if (verbose) {printf("term -> SUB term'\n");}
+       }
      | termA {
-        strcpy($$.place, $1.place);
-        strcpy($$.code, $1.code);
-        if (verbose) {printf("term -> term'\n");}
-     }
+          strcpy($$.place, $1.place);
+          strcpy($$.code, $1.code);
+          if (verbose) {printf("term -> term'\n");}
+       }
      ;
 
 termA : var {
           newtemp($$.place);
           gen3($$.code, "=", $$.place, $1); 
           if (verbose) {printf("term' -> var \n");}
-      }
+        }
       | NUMBER {
           int imm = $1;
           newtemp($$.place);
           gen3i($$.code, "=", $$.place, imm);
-          printf("%s", $$.code);
+          //printf("%s", $$.code);
           if (verbose) {printf("term' -> NUMBER \n");}
-      }
+        }
       | L_PAREN expression R_PAREN {
           strcpy($$.place, $2.place);
           strcpy($$.code,$2.code);
           if (verbose) {printf("term' -> (expression)\n");}
-      }
+        }
       ;
 
 %%
@@ -285,15 +345,15 @@ int main (const int argc, const char** argv) {
         printf("syntax: %s filename\n", argv[0]);
         exit(1);
       }
-  }
+    }
   // symtab_init(&symtab);
   // printf("%i\n", symtab.initialized);
   // printf("%i\n", symtab.length);
 
   yyparse();
-  return 0;
-}
+  return 0; 
+ }
 
 void yyerror(const char* msg) {
-    printf("** Line %d, position %d: %s\n", yylineno, yycolumno, msg);
-}
+    printf("** Line %d, position %d: %s\n", yylineno, yycolumno, msg);  
+ }
