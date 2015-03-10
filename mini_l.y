@@ -55,7 +55,11 @@
 
 
 %%
-input : Program {if (verbose) {printf("input -> Program\n");}}
+input : Program {
+          // iterate over symbol table and generate init statements, save into buffer
+          // concat buffer with Program.code
+          if (verbose) {printf("input -> Program\n");}
+      }
       ;
 
 Program : PROGRAM IDENT SEMICOLON block END_PROGRAM {
@@ -155,29 +159,83 @@ comp : EQ  {$$ = "=="; if (verbose) {printf("comp -> ==\n");}}
      | GT  {$$ = ">"; if (verbose) {printf("comp-> > \n");}}
      ;
 
-m_exp : term { if (verbose) {printf("multiplicative_exp -> term\n");}}
-      | m_exp MULT term { if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}}
-      | m_exp DIV term { if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}} // willdly unsafe
-      | m_exp MOD term { if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}}
+m_exp : term { 
+          strcpy($$.place, $1.place);
+          strcpy($$.code, $1.code);
+          if (verbose) {printf("multiplicative_exp -> term\n");}
+      }
+      | m_exp MULT term { 
+          newtemp($$.place);
+          char quad[16];
+          gen4(quad, "*", $$.place, $1.place, $3.place);
+          
+          strcpy($$.code, $1.code);
+          strcat($$.code, $3.code);
+          strcat($$.code, quad);
+
+          if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}
+      }
+      | m_exp DIV term { 
+          newtemp($$.place);
+          char quad[16];
+          gen4(quad, "/", $$.place, $1.place, $3.place);
+          
+          strcpy($$.code, $1.code);
+          strcat($$.code, $3.code);
+          strcat($$.code, quad);
+          if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}
+      }
+      | m_exp MOD term { 
+          newtemp($$.place);
+          char quad[16];
+          gen4(quad, "%", $$.place, $1.place, $3.place);
+          
+          strcpy($$.code, $1.code);
+          strcat($$.code, $3.code);
+          strcat($$.code, quad);
+          if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}
+      }
       ;
 
-expression : m_exp { if (verbose) {printf("expression -> multiplicative_exp\n");}}
-           | expression ADD m_exp {if (verbose) {printf("expression -> expression + multiplicative_exp\n");}}
-           | expression SUB m_exp {if (verbose) {printf("expression -> expression - multiplicative_exp\n");}}
+expression : m_exp { 
+              strcpy($$.place, $1.place);
+              strcpy($$.code, $1.code);
+              if (verbose) {printf("expression -> multiplicative_exp\n");}
+           }
+           | expression ADD m_exp {
+              newtemp($$.place);
+
+              char quad[16];
+              gen4(quad, "+", $$.place, $1.place, $3.place); 
+
+              strcpy($$.code, $1.code);
+              strcat($$.code, $3.code);
+              strcat($$.code, quad);
+              if (verbose) {printf("expression -> expression + multiplicative_exp\n");}
+           }
+           | expression SUB m_exp {
+              newtemp($$.place);
+              
+              char quad[16];
+              gen4(quad, "-", $$.place, $1.place, $3.place); 
+
+              strcpy($$.code, $1.code);
+              strcat($$.code, $3.code);
+              strcat($$.code, quad);
+              if (verbose) {printf("expression -> expression - multiplicative_exp\n");}
+           }
            ;
 
-/* will need symbol table lookups on $$ for this one */
-/* stubbing with 0 for now */
 
 var : IDENT L_BRACKET expression R_BRACKET {
-        sprintf($$, "%s,%s", $1, $3.place);
+        sprintf($$, "%s,%s", $1, $3.place); // id, index
         // printf("%s\n",$$);
         if (verbose) {printf("var -> ident[expression]\n");}
     }
 
     | IDENT {
         strcpy($$, $1);
-        printf("%s\n",$$);
+        printf("%s\n",$$); // id
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
     }
     ;
