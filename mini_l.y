@@ -169,9 +169,9 @@ stmt_list : statement SEMICOLON {
               }
             }
           | statement SEMICOLON stmt_list {
-              strcpy($$.begin,$1.begin)
-              strcpy($$.after,$3.after)
-              strcat($$.code, $1.code)
+              strcpy($$.begin,$1.begin);
+              strcpy($$.after,$3.after);
+              strcat($$.code, $1.code);
               strcat($$.code, $3.code);
 
               if (verbose) {
