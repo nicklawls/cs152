@@ -1,8 +1,8 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
-  #include "symbol_table.h"
-  #include "codegen.h"
+  //#include "symbol_table.h"
+  //#include "codegen.h"
 	void yyerror(const char *message);
   extern int yylineno;
   extern int yycolumno;
@@ -48,15 +48,15 @@
 
 
 
-%type <expr> expression
-%type <expr> term termA
-%type <expr> m_exp relation_exp relation_expA
-%type <expr> relation_and_exp bool_exp 
+%type <strval> expression
+%type <strval> term termA
+%type <strval> m_exp relation_exp relation_expA
+%type <strval> relation_and_exp bool_exp 
 %type <strval> comp var  
 %type <strlist> var_list id_list
-%type <stmt> statement stmt_list decl_list elif_list
-%type <stmt> block  
-%type <stmt> Program declaration
+%type <strval> statement stmt_list decl_list elif_list
+%type <strval> block  
+%type <strval> Program declaration
 
 
 
