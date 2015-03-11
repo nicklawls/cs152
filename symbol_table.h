@@ -60,12 +60,13 @@ void symtab_put(char* name, int type ) {
         
         int index = symtab_get(name);
         int not_present = !index;
-        printf("MARK\n");
 
         if (not_present) {
             symtab.length++;       
             strcpy(symtab.st[symtab.length].name, name);
             symtab.st[symtab.length].type = type;
+            printf("MARK\n");
+
         } else {
             strcpy(symtab.st[index].name, name);
             symtab.st[index].type = type;
