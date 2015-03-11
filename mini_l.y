@@ -122,7 +122,7 @@ elif_list : ELSEIF bool_exp stmt_list {
               gen2(gotonext, ":=", $4.begin); 
               strcat($$.code, gotonext); // if not a hit, skip to next elif
               strcat($$.code, $3.code); // code for statement list
-              gen2(gotoend, ":=", $$.after)
+              gen2(gotoend, ":=", $$.after);
               strcat($$.code, gotoend); // skip to the very end when done
               strcat($$.code, $4.code); // rest of the list
               
