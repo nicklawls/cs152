@@ -7,7 +7,7 @@
   extern int yylineno;
   extern int yycolumno;
   FILE* yyin;
-  int verbose = 1;
+  int verbose = 0;
 %}
 
 %union{
@@ -16,12 +16,15 @@
   struct expr {
     char place[8];
     char code[512];
-    } expr;
+  } expr;
   struct stmt {
     char begin[16];
     char code[2048];
     char after[256];
-    } stmt; 
+    char continue_to[256];
+    char break_to[256];
+    char exit_to[256];
+  } stmt; 
   struct strlist {
     char list[64][64];
     int length;
@@ -646,12 +649,18 @@ termA : var { // when var becomes a term, we only want the value currently in it
 
 int main (const int argc, const char** argv) {  
   if (argc > 1) {
-      yyin = fopen(argv[1], "r");
-      if (yyin == NULL) {
-        printf("syntax: %s filename\n", argv[0]);
-        exit(1);
-      }
+    yyin = fopen(argv[1], "r");
+    if (yyin == NULL) {
+      printf("syntax: %s filename\n", argv[0]);
+      exit(1);
     }
+  }
+
+  if (true) {
+    printf("A\n");
+    break;
+    printf("B\n");
+  }
   
   symtab_init();
 
