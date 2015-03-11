@@ -53,8 +53,8 @@
 %type <expr> m_exp relation_exp relation_expA
 %type <expr> relation_and_exp bool_exp 
 %type <strval> comp var  
-%type <strlist> var_list decl_list id_list
-%type <stmt> statement stmt_list
+%type <strlist> var_list id_list
+%type <stmt> statement stmt_list decl_list
 %type <stmt> block  
 %type <stmt> Program declaration
 
@@ -86,13 +86,54 @@ declaration : id_list COLON INTEGER {if (verbose) {printf("declaration -> id_lis
               }
             ;
 
-id_list : IDENT {if (verbose) {printf("id_list -> ident\n");}}
+id_list : IDENT {
+            if (verbose) {printf("id_list -> ident\n");}
+          }
         | IDENT COMMA id_list {if (verbose) {printf("id_list -> ident, id_list\n");}}
         ;
 
-elif_list : ELSEIF bool_exp stmt_list {if (verbose) {printf("elif_list -> elseif bool_exp stmt_list\n");}}
+elif_list : ELSEIF bool_exp stmt_list {
+              newlabel($$.begin);
+              newlabel($$.after);
+
+              gen2($$.code, ":", $$.begin); // declare label first
+              strcat($$.code, $2.code); // add code to compute expression
+
+              char if[64], gotoend[64], end[64];
+
+              gen3(if, "?:=", $3.begin, $2.place );
+              gen2(gotoend, ":=", $$.after);
+
+              strcat($$.code, if);
+              strcat($$.code, gotoend);
+              strcat($$.code, $3.code);
+
+              gen3(end, ":", $$.after) 
+              strcat($$.code, end);             
+
+              if (verbose) {printf("elif_list -> elseif bool_exp stmt_list\n");}
+            }
           | ELSEIF bool_exp stmt_list elif_list {
-                if (verbose) {printf("elif_list -> elseif bool_exp stmt_list elif_list\n");}
+              newlabel($$.begin);
+              newlabel($$.after);
+
+              gen2($$.code, ":", $$.begin); // declare label first
+              strcat($$.code, $2.code); // add code to compute expression
+
+              char if[64], gotoend[64], end[64];
+
+              gen3(if, "?:=", $3.begin, $2.place );
+              gen2(gotoend, ":=", $$.after);
+
+              strcat($$.code, if);
+              strcat($$.code, gotoend);
+              strcat($$.code, $3.code);
+
+              gen3(end, ":", $$.after) 
+              strcat($$.code, end);
+
+              strcat($$.code, $4.code); // is that really all?
+              if (verbose) {printf("elif_list -> elseif bool_exp stmt_list elif_list\n");}
             }
           ;
 
@@ -120,10 +161,49 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
                 if (verbose) {printf("statement -> var := bool_exp ? expression : expression\n");}
             }
           | IF bool_exp THEN stmt_list ENDIF {
-                if (verbose) {printf("statement -> if bool_exp then stmt_list endif\n");}
+              newlabel($$.begin);
+              newlabel($$.after);
+
+              gen2($$.code, ":", $$.begin); // declare label first
+              strcat($$.code, $2.code); // add code to compute expression
+              
+
+              char if[64], gotoend[64], end[64];
+              
+              gen3(if, "?:=", $4.begin, $2.place) // if true then statementlist
+              gen2(gotoend, ":=", $$.after); // else goto end
+
+              strcat($$.code, if); // add the if
+              strcat($$.code, gotoend);// add the branch around
+              strcat($$.code, $4.code); // add the code for if
+
+              gen2(end, ":", $$.after); // declare ending label and add it
+              strcat($$.code, end);
+
+              if (verbose) {printf("statement -> if bool_exp then stmt_list endif\n");}
             }
           | IF bool_exp THEN stmt_list ELSE stmt_list ENDIF {
-                if (verbose) {printf("statement -> if bool_exp then stmt_list else stmt_list endif\n");}
+              newlabel($$.begin); // stick with the convention of begin/place being names
+              newlabel($$.after); 
+              gen2($$.code, ":", $$.begin); // start with the new label
+              strcat($$.code, $2.code); // add code to compute the boolean
+              
+              char if[64], else[64], gotoend[64], end[64];
+              
+              gen3(if, "?:=", $4.begin, $2.place) // brances
+              gen2(else, ":=", $6.begin);
+              gen2(gotoend, ":=", $$.after);
+
+              strcat($$.code, if);
+              strcat($$.code, else);
+              strcat($$.code, $4.code);
+              strcat($$.code, gotoend);
+              strcat($$.code, $6.code);
+              
+              gen2(end, ":", $$.after);
+              strcat($$.code, end);
+
+              if (verbose) {printf("statement -> if bool_exp then stmt_list else stmt_list endif\n");}
             }
           | IF bool_exp THEN stmt_list elif_list ENDIF {
                 if (verbose) {printf("statement -> if bool_exp then stmt_list elif_list endif\n");}
