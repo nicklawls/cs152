@@ -195,7 +195,7 @@ stmt_list : statement SEMICOLON {
        // Correctly ignores stmt_lists ending in break, redundant
        // | statement SEMICOLON BREAK SEMICOLON {}
           ;
-       }
+
 
 var_list : var {
             if (verbose) {
