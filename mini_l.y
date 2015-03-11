@@ -345,7 +345,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
         sprintf($$, "%s,%s", $1, $3.place); // id, index
         if (verbose) {
           printf("var -> ident[expression]\n");
-          printf("%s\n",$$);
+          printf("%s\n\n",$$);
         }
       }
 
@@ -355,7 +355,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
         
         if (verbose) {
           printf("var -> ident %s\n", $1);
-          printf("%s\n",$$); // id
+          printf("%s\n\n",$$); // id
         } // not printing $1 for some reason
       }
     ;
@@ -396,7 +396,7 @@ termA : var { // when var becomes a term, we only want the value currently in it
 
           if (verbose) {
             printf("term' -> var \n");
-            printf("%s\n", $$.code);
+            printf("%s\n\n", $$.code);
           }
         }
       | NUMBER {
@@ -406,15 +406,15 @@ termA : var { // when var becomes a term, we only want the value currently in it
           
           if (verbose) {
             printf("term' -> NUMBER \n");
-            printf("%s\n", $$.code);
+            printf("%s\n\n", $$.code);
           }
         }
       | L_PAREN expression R_PAREN {
           strcpy($$.place, $2.place);
           strcpy($$.code,$2.code);
           if (verbose) {
-            printf("term' -> (expression)\n");
-            printf("%s\n", $$.code);
+            printf("term' -> (expression)\n\n");
+            printf("%s\n\n", $$.code);
           }
         }
       ;
