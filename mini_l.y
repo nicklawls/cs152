@@ -13,19 +13,19 @@
 %union{
 	int intval;
   char* strval;
-  struct expr {
-    char place[8];
-    char code[16384];
-    } expr;
-  struct stmt {
-    char begin[16];
-    char code[16384];
-    char after[256];
-    } stmt; 
-  struct strlist {
-    char list[256][256];
-    int length;
-  } strlist;
+  //struct expr {
+  //  char place[8];
+  //  char code[16384];
+  //  } expr;
+  //struct stmt {
+  //  char begin[16];
+  //  char code[16384];
+  //  char after[256];
+  //  } stmt; 
+  //struct strlist {
+  //  char list[256][256];
+  //  int length;
+  //} strlist;
 
 }
 
