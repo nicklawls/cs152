@@ -99,9 +99,9 @@ elif_list : ELSEIF bool_exp stmt_list {
               gen2($$.code, ":", $$.begin); // declare label first
               strcat($$.code, $2.code); // add code to compute expression
 
-              char if[64], gotoend[64], end[64];
+              char ifthen[64], gotoend[64], end[64];
 
-              gen3(if, "?:=", $3.begin, $2.place );
+              gen3(ifthen, "?:=", $3.begin, $2.place );
               gen2(gotoend, ":=", $$.after);
 
               strcat($$.code, if);
@@ -120,9 +120,9 @@ elif_list : ELSEIF bool_exp stmt_list {
               gen2($$.code, ":", $$.begin); // declare label first
               strcat($$.code, $2.code); // add code to compute expression
 
-              char if[64], gotoend[64], end[64];
+              char ifthen[64], gotoend[64], end[64];
 
-              gen3(if, "?:=", $3.begin, $2.place );
+              gen3(ifthen, "?:=", $3.begin, $2.place );
               gen2(gotoend, ":=", $$.after);
 
               strcat($$.code, if);
@@ -168,9 +168,9 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               strcat($$.code, $2.code); // add code to compute expression
               
 
-              char if[64], gotoend[64], end[64];
+              char ifthen[64], gotoend[64], end[64];
               
-              gen3(if, "?:=", $4.begin, $2.place) // if true then statementlist
+              gen3(ifthen, "?:=", $4.begin, $2.place) // if true then statementlist
               gen2(gotoend, ":=", $$.after); // else goto end
 
               strcat($$.code, if); // add the if
@@ -188,9 +188,9 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               gen2($$.code, ":", $$.begin); // start with the new label
               strcat($$.code, $2.code); // add code to compute the boolean
               
-              char if[64], else[64], gotoend[64], end[64];
+              char ifthen[64], else[64], gotoend[64], end[64];
               
-              gen3(if, "?:=", $4.begin, $2.place) // brances
+              gen3(ifthen, "?:=", $4.begin, $2.place) // brances
               gen2(else, ":=", $6.begin);
               gen2(gotoend, ":=", $$.after);
 
