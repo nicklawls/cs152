@@ -9,7 +9,7 @@ debug:
 
 parser_debug: flexfile
 	touch *
-	gcc -o parser y.tab.c lex.yy.c -lfl -g
+	gcc -o parser y.tab.c lex.yy.c -g -lfl
 
 parser: flexfile
 	touch *
