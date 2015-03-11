@@ -23,7 +23,7 @@
     char after[256];
     } stmt; 
   struct strlist {
-    char list[256][256];
+    char list[64][64];
     int length;
   } strlist;
 
