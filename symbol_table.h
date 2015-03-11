@@ -60,9 +60,7 @@ void symtab_put(char* name, int type ) {
 
         if (not_present) {
             symtab.length++;       
-            printf("A\n");
             strcpy(symtab.st[symtab.length].name, name);
-            printf("B\n");
             symtab.st[symtab.length].type = type;
 
 
