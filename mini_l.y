@@ -1,8 +1,8 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
-  //#include "symbol_table.h"
-  //#include "codegen.h"
+  #include "symbol_table.h"
+  #include "codegen.h"
 	void yyerror(const char *message);
   extern int yylineno;
   extern int yycolumno;
@@ -423,9 +423,9 @@ int main (const int argc, const char** argv) {
         exit(1);
       }
     }
-  //symtab_init();
-  //printf("%i\n", symtab.initialized);
-  //printf("%i\n", symtab.length);
+  symtab_init();
+  printf("%i\n", symtab.initialized);
+  printf("%i\n", symtab.length);
 
   yyparse();
   return 0; 
