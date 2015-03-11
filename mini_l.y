@@ -190,6 +190,7 @@ stmt_list : statement SEMICOLON {
 
               if (verbose) {
                 printf("stmt_list -> statement; break; stmt_list\n");
+                printf("%s\n\n", $$.code);
               }
             }
        // Correctly ignores stmt_lists ending in break, redundant
