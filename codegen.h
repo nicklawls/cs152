@@ -28,12 +28,14 @@ static int tmpcount = 0;
 static int labelcount = 0;
 
 void newtemp(char* dst) {
-    do {
-        ++tmpcount;
-        if (tmpcount % 1045) {printf("Waiting\n");}
-        sprintf(dst, "t%i",tmpcount);
-    } while(symtab_get(dst));
-
+    
+    
+    while(symtab_get(dst)) {
+        tmpcount++;
+        sprintf(dst, "t%i",tmpcount);   
+    };
+    ++tmpcount; // do the next one for later
+    printf("newtemp ended\n");
     symtab_put(dst, 0); // temps are always int
 }
 
