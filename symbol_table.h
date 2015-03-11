@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 struct symbol {
-    char* name;
+    char name[64];
     int type; // 0 for int, 1 for array
 };
 
