@@ -30,6 +30,7 @@ static int labelcount = 0;
 void newtemp(char* dst) {
     do {
         ++tmpcount;
+        if (tmpcount % 1045) {printf("Waiting\n");}
         sprintf(dst, "t%i",tmpcount);
     } while(symtab_get(dst));
 
