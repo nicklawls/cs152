@@ -209,8 +209,8 @@ bool_exp : relation_and_exp {
          ;
 
 relation_and_exp : relation_exp {
-                    strcpy($$.place, $1.place);
-                    strcpy($$.code, $1.code);
+                    //strcpy($$.place, $1.place);
+                    //strcpy($$.code, $1.code);
                     if (verbose) {printf("relation_and_exp -> relation_exp\n");}
                    }
                  | relation_and_exp AND relation_exp {
@@ -372,21 +372,21 @@ term : SUB termA {
      ;
 
 termA : var { // when var becomes a term, we only want the value currently in it
-          int index = symtab_get($1);
+          //int index = symtab_get($1);
           // handle both the int and array cases
-          if (index) {
-            if (symtab_entry_is_int(index)) {
+          //if (index) {
+            //if (symtab_entry_is_int(index)) {
               // avoid making new temp since variable already declared
               //strcpy($$.place,$1);
               //strcpy($$.code,"");
-            } else {
+            //} else {
               // newtemp to extract value at index
               //newtemp($$.place);
               //gen3($$.code, "=[]", $$.place, $1 ); // $1 has "name,index"
-            }
-          } else {
+            //}
+          //} else {
             // handle error
-          }
+          //}
 
           if (verbose) {printf("term' -> var \n");}
         }
@@ -414,9 +414,9 @@ int main (const int argc, const char** argv) {
         exit(1);
       }
     }
-  symtab_init();
-  printf("%i\n", symtab.initialized);
-  printf("%i\n", symtab.length);
+  //symtab_init();
+  //printf("%i\n", symtab.initialized);
+  //printf("%i\n", symtab.length);
 
   yyparse();
   return 0; 
