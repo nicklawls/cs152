@@ -26,7 +26,7 @@ void symtab_init(){
 
 
 
-// returns index of matching symbol, -1 if not found
+// returns index of matching symbol, 0 if not found
 int symtab_get(char* key) { 
     if (symtab.initialized) {
         int length = symtab.length;
@@ -42,7 +42,7 @@ int symtab_get(char* key) {
         exit(1);
     }
 
-    return -1;
+    return 0;
 }
 
 
