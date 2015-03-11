@@ -193,122 +193,199 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
           ;
 
 bool_exp : relation_and_exp {
-            //strcpy($$.place, $1.place);
-            //strcpy($$.code, $1.code);
-            if (verbose) {printf("bool_exp -> relation_and_exp\n");}
+            strcpy($$.place, $1.place);
+            strcpy($$.code, $1.code);
+            if (verbose) {
+              printf("bool_exp -> relation_and_exp\n");
+              printf("%s\n\n", $$.code);
+            }
            }
          | bool_exp OR relation_and_exp {
-            //newtemp($$.place);
-            //char quad[16];
-            //gen4(quad, "||", $$.place, $1.place, $3.place);
-            //strcpy($$.code, $1.code);
-            //strcat($$.code, $3.code);
-            //strcat($$.code, quad);
-            if (verbose) {printf("bool_exp -> bool_exp OR relation_and_exp\n");}
+            newtemp($$.place);
+            char quad[16];
+            gen4(quad, "||", $$.place, $1.place, $3.place);
+            strcpy($$.code, $1.code);
+            strcat($$.code, $3.code);
+            strcat($$.code, quad);
+            if (verbose) {
+              printf("bool_exp -> bool_exp OR relation_and_exp\n");
+              printf("%s\n\n", $$.code);
+            }
            }
          ;
 
 relation_and_exp : relation_exp {
-                    //strcpy($$.place, $1.place);
-                    //strcpy($$.code, $1.code);
-                    if (verbose) {printf("relation_and_exp -> relation_exp\n");}
+                    strcpy($$.place, $1.place);
+                    strcpy($$.code, $1.code);
+                    if (verbose) {
+                      printf("relation_and_exp -> relation_exp\n");
+                      printf("%s\n\n", $$.code);
+                    }
                    }
                  | relation_and_exp AND relation_exp {
-                    //newtemp($$.place);
-                    //char quad[16];
-                    //gen4(quad, "&&", $$.place, $1.place, $3.place);
-                    //strcpy($$.code, $1.code);
-                    //strcat($$.code, $3.code);
-                    //strcat($$.code, quad);
+                    newtemp($$.place);
+                    char quad[16];
+                    gen4(quad, "&&", $$.place, $1.place, $3.place);
+                    strcpy($$.code, $1.code);
+                    strcat($$.code, $3.code);
+                    strcat($$.code, quad);
 
-                    if (verbose) {printf("relation_and_exp -> relation_and_exp AND relation_exp\n");}
+                    if (verbose) {
+                      printf("relation_and_exp -> relation_and_exp AND relation_exp\n");
+                      printf("%s\n\n", $$.code);
+                    }
                    }
                  ;
 
 relation_expA : expression comp expression {
-                  //newtemp($$.place);
-                  //char quad[16];
-                  //gen4(quad, $2, $$.place, $1.place, $3.place);
-                  //strcpy($$.code, $1.code);
-                  //strcat($$.code, $3.code);
-                  //strcat($$.code, quad);
+                  newtemp($$.place);
+                  char quad[16];
+                  gen4(quad, $2, $$.place, $1.place, $3.place);
+                  strcpy($$.code, $1.code);
+                  strcat($$.code, $3.code);
+                  strcat($$.code, quad);
 
-                  if (verbose) {printf("relation_exp' -> expression comp expression\n");}
+                  if (verbose) {
+                    printf("relation_exp' -> expression comp expression\n");
+                    printf("%s\n\n", $$.code);
+                  }
                 }
               | TRUE {
-                  //newtemp($$.place);
-                  //gen3i($$.code, "=", $$.place, 1);
-                  if (verbose) {printf("relation_exp' -> TRUE\n");}
+                  newtemp($$.place);
+                  gen3i($$.code, "=", $$.place, 1);
+                  if (verbose) {
+                    printf("relation_exp' -> TRUE\n");
+                    printf("%s\n\n", $$.code);
+                  }
                 }
               | FALSE { 
-                //newtemp($$.place);
-                //gen3i($$.code, "=", $$.place, 0);
-                if (verbose) {printf("relation_exp' -> FALSE\n");}
+                newtemp($$.place);
+                gen3i($$.code, "=", $$.place, 0);
+                if (verbose) {
+                  printf("relation_exp' -> FALSE\n");
+                  printf("%s\n\n", $$.code);
+                }
               }
               | L_PAREN bool_exp R_PAREN { 
-                  //strcpy($$.place, $2.place);
-                  //strcpy($$.code, $2.code);
-                  if (verbose) {printf("relation_exp' -> (bool_exp)\n");}
+                  strcpy($$.place, $2.place);
+                  strcpy($$.code, $2.code);
+                  if (verbose) {
+                    printf("relation_exp' -> (bool_exp)\n");
+                    printf("%s\n\n", $$.code);
+                  }
                 }
               ;
 
 relation_exp : NOT relation_expA { 
-                //strcpy($$.place, $2.place);
-                //strcpy($$.code, $2.code);
-                //char signswitch[16];
-                //gen3(signswitch, "!", $$.place, $$.place);
-                //strcat($$.code, signswitch);
-                if (verbose) {printf("relation_exp -> not relation_exp'\n");}
+                strcpy($$.place, $2.place);
+                strcpy($$.code, $2.code);
+                char signswitch[16];
+                gen3(signswitch, "!", $$.place, $$.place);
+                strcat($$.code, signswitch);
+                
+                if (verbose) {
+                  printf("relation_exp -> not relation_exp'\n");
+                  printf("%s\n\n", $$.code);
+                }
                }
              | relation_expA {
-                //strcpy($$.place, $1.place);
-                //strcpy($$.code, $1.code);
-                if (verbose) {printf("relation_exp -> relation_exp'\n");}
+                strcpy($$.place, $1.place);
+                strcpy($$.code, $1.code);
+                if (verbose) {
+                  printf("relation_exp -> relation_exp'\n");
+                  printf("%s\n\n", $$.code);
+                }
                }
              ;
 
-comp : EQ  {/*strcpy($$, "==");*/ if (verbose) {printf("comp -> ==\n");}}
-     | NEQ {/*strcpy($$, "!=");*/ if (verbose) {printf("comp -> <>\n");}}
-     | LTE {/*strcpy($$, "<=");*/ if (verbose) {printf("comp -> <=\n");}}
-     | GTE {/*strcpy($$, ">=");*/ if (verbose) {printf("comp -> >=\n");}}
-     | LT  {/*strcpy($$, "<"); */if (verbose) {printf("comp-> < \n");}}
-     | GT  {/*strcpy($$, ">"); */if (verbose) {printf("comp-> > \n");}}
+comp : EQ  {
+        strcpy($$, "=="); 
+        if (verbose) {
+          printf("comp -> ==\n");
+          printf("%s\n\n", $$.code);
+        }
+       }
+     | NEQ {
+        strcpy($$, "!="); 
+        if (verbose) {
+          printf("comp -> <>\n");
+          printf("%s\n\n", $$.code);
+        }
+       }
+     | LTE {
+        strcpy($$, "<="); 
+        if (verbose) {
+          printf("comp -> <=\n");
+          printf("%s\n\n", $$.code);
+        }
+       }
+     | GTE {
+        strcpy($$, ">="); 
+        if (verbose) {
+          printf("comp -> >=\n");
+          printf("%s\n\n", $$.code);
+        }
+       }
+     | LT  {
+        strcpy($$, "<"); 
+        if (verbose) {
+          printf("comp-> < \n");
+          printf("%s\n\n", $$.code);
+        }
+       }
+     | GT  {
+        strcpy($$, ">"); 
+        if (verbose) {
+          printf("comp-> > \n");
+          printf("%s\n\n", $$.code);
+        }
+       }
      ;
 
 m_exp : term { 
-          //strcpy($$.place, $1.place);
-          //strcpy($$.code, $1.code);
-          if (verbose) {printf("multiplicative_exp -> term\n");}
+          strcpy($$.place, $1.place);
+          strcpy($$.code, $1.code);
+          if (verbose) {
+            printf("multiplicative_exp -> term\n");
+            printf("%s\n\n", $$.code);
+          }
         }
       | m_exp MULT term { 
-          //newtemp($$.place);
-          //char quad[16];
-          //gen4(quad, "*", $$.place, $1.place, $3.place);
-          //strcpy($$.code, $1.code);
-          //strcat($$.code, $3.code);
-          //strcat($$.code, quad);
+          newtemp($$.place);
+          char quad[16];
+          gen4(quad, "*", $$.place, $1.place, $3.place);
+          strcpy($$.code, $1.code);
+          strcat($$.code, $3.code);
+          strcat($$.code, quad);
 
-          if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}
+          if (verbose) {
+            printf("multiplicative_exp -> multiplicative_exp * term\n");
+            printf("%s\n\n", $$.code);
+          }
         }
       | m_exp DIV term { 
-          //newtemp($$.place);
-          //char quad[16];
-          //gen4(quad, "/", $$.place, $1.place, $3.place);
-          //strcpy($$.code, $1.code);
-          //strcat($$.code, $3.code);
-          //strcat($$.code, quad);
-          if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}
+          newtemp($$.place);
+          char quad[16];
+          gen4(quad, "/", $$.place, $1.place, $3.place);
+          strcpy($$.code, $1.code);
+          strcat($$.code, $3.code);
+          strcat($$.code, quad);
+          
+          if (verbose) {
+            printf("multiplicative_exp -> multiplicative_exp / term\n");
+            printf("%s\n\n", $$.code);
+          }
         }
       | m_exp MOD term { 
-          //newtemp($$.place);
-          //char quad[16];
-          //gen4(quad, "%", $$.place, $1.place, $3.place);
-          //strcpy($$.code, $1.code);
-          //strcat($$.code, $3.code);
-          //strcat($$.code, quad);
+          newtemp($$.place);
+          char quad[16];
+          gen4(quad, "%", $$.place, $1.place, $3.place);
+          strcpy($$.code, $1.code);
+          strcat($$.code, $3.code);
+          strcat($$.code, quad);
           if (verbose) {
             printf("multiplicative_exp -> multiplicative_exp modulo term\n");
-            //printf("%s\n\n", $$.code);
+            printf("%s\n\n", $$.code);
           }
         }
       ;
@@ -414,6 +491,7 @@ termA : var { // when var becomes a term, we only want the value currently in it
             printf("%s\n\n", $$.code);
           }
         }
+
       | NUMBER {
           int imm = $1;
           newtemp($$.place);
