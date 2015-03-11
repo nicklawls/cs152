@@ -186,6 +186,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
 
               if (verbose) {
                 printf("statement -> do beginloop stmt_list endloop while bool_exp\n");
+                printf("%s\n\n", $$.code);
               }
             }
           | WHILE bool_exp BEGINLOOP stmt_list ENDLOOP {
@@ -208,6 +209,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
 
               if (verbose) {
                 printf("statement -> while bool_exp beginloop stmt_list endloop\n");
+                printf("%s\n\n", $$.code);
               }
             }
           | var ASSIGN expression {if (verbose) {printf("statement -> var := expression\n");}}
