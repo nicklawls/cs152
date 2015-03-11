@@ -4,17 +4,12 @@ all: parser
 run: all
 	./parser
 
-test_primes: 
-	./parser tests/primes.min
+debug:
+	gdb ./parser
 
-test_ifelseif:
-	./parser tests/ifelseiftest.min
-
-test_dowhile:
-	./parser tests/dowhiletest.min
-
-test_mytest:
-	./parser tests/mytest.min
+parser_debug: flexfile
+	touch *
+	gcc -o parser y.tab.c lex.yy.c -lfl -g
 
 parser: flexfile
 	touch *
