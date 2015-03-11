@@ -7,7 +7,7 @@
   extern int yylineno;
   extern int yycolumno;
   FILE* yyin;
-  int verbose = 1;
+  int verbose = 0;
 %}
 
 %union{
