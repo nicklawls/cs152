@@ -111,6 +111,12 @@ elif_list : ELSEIF bool_exp stmt_list {
                 printf("%s\n\n", $$.code);
               }
             }
+          | ELSEIF bool_exp stmt_list ELSE stmt_list {
+              if (verbose) {
+                printf("elif_list -> elseif bool_exp stmt_list ELSE stmt_list\n");
+                printf("%s\n\n", $$.code);
+              } 
+            } 
           | ELSEIF bool_exp stmt_list elif_list {
               newlabel($$.begin);
               strcpy($$.after, $4.after);
@@ -131,6 +137,7 @@ elif_list : ELSEIF bool_exp stmt_list {
                 printf("%s\n\n", $$.code);
               }
             }
+          
           ;
 
 stmt_list : statement SEMICOLON {if (verbose) {printf("stmt_list -> statement;\n");}}
@@ -216,14 +223,16 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
                 printf("%s\n\n", $$.code);
               }
             }
-          | IF bool_exp THEN stmt_list elif_list ELSE stmt_list ENDIF {
+          /*| IF bool_exp THEN stmt_list elif_list ELSE stmt_list ENDIF {
               // if boo then stmt_list and skip to end
               // else, do elif list, if no hits, do else
+
+
               if (verbose) {
                 printf("statement -> if bool_exp then stmt_list elif_list else stmt_list endif\n");
                 printf("%s\n\n", $$.code);
               }
-            }
+            }*/
           ;
 
 bool_exp : relation_and_exp {
