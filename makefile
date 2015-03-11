@@ -22,7 +22,7 @@ bisonfile: mini_l.y
 	bison -v -d --file-prefix=y mini_l.y
 
 clean:
-	rm -rf *.c *.h *.o *.output parser
+	rm -rf *.c *.o *.output parser
 
 ## update:
 ##	git pull

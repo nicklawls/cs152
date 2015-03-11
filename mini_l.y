@@ -93,46 +93,35 @@ id_list : IDENT {
         ;
 
 elif_list : ELSEIF bool_exp stmt_list {
-              newlabel($$.begin);
-              newlabel($$.after);
-
-              gen2($$.code, ":", $$.begin); // declare label first
-              strcat($$.code, $2.code); // add code to compute expression
-
-              char ifthen[64], gotoend[64], end[64];
-
-              gen3(ifthen, "?:=", $3.begin, $2.place );
-              gen2(gotoend, ":=", $$.after);
-
-              strcat($$.code, ifthen);
-              strcat($$.code, gotoend);
-              strcat($$.code, $3.code);
-
-              gen2(end, ":", $$.after);
-              strcat($$.code, end);             
+              //newlabel($$.begin);
+              //newlabel($$.after);
+              //gen2($$.code, ":", $$.begin); // declare label first
+              //strcat($$.code, $2.code); // add code to compute expression
+              //char ifthen[64], gotoend[64], end[64];
+              //gen3(ifthen, "?:=", $3.begin, $2.place );
+              //gen2(gotoend, ":=", $$.after);
+              //strcat($$.code, ifthen);
+              //strcat($$.code, gotoend);
+              //strcat($$.code, $3.code);
+              //gen2(end, ":", $$.after);
+              //strcat($$.code, end);             
 
               if (verbose) {printf("elif_list -> elseif bool_exp stmt_list\n");}
             }
           | ELSEIF bool_exp stmt_list elif_list {
-              newlabel($$.begin);
-              newlabel($$.after);
-
-              gen2($$.code, ":", $$.begin); // declare label first
-              strcat($$.code, $2.code); // add code to compute expression
-
-              char ifthen[64], gotoend[64], end[64];
-
-              gen3(ifthen, "?:=", $3.begin, $2.place );
-              gen2(gotoend, ":=", $$.after);
-
-              strcat($$.code, ifthen);
-              strcat($$.code, gotoend);
-              strcat($$.code, $3.code);
-
-              gen2(end, ":", $$.after); 
-              strcat($$.code, end);
-
-              strcat($$.code, $4.code); // is that really all?
+              //newlabel($$.begin);
+              //newlabel($$.after);
+              //gen2($$.code, ":", $$.begin); // declare label first
+              //strcat($$.code, $2.code); // add code to compute expression
+              //char ifthen[64], gotoend[64], end[64];
+              //gen3(ifthen, "?:=", $3.begin, $2.place );
+              //gen2(gotoend, ":=", $$.after);
+              //strcat($$.code, ifthen);
+              //strcat($$.code, gotoend);
+              //strcat($$.code, $3.code);
+              //gen2(end, ":", $$.after); 
+              //strcat($$.code, end);
+              //strcat($$.code, $4.code); // is that really all?
               if (verbose) {printf("elif_list -> elseif bool_exp stmt_list elif_list\n");}
             }
           ;
@@ -161,47 +150,37 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
                 if (verbose) {printf("statement -> var := bool_exp ? expression : expression\n");}
             }
           | IF bool_exp THEN stmt_list ENDIF {
-              newlabel($$.begin);
-              newlabel($$.after);
-
-              gen2($$.code, ":", $$.begin); // declare label first
-              strcat($$.code, $2.code); // add code to compute expression
-              
-
-              char ifthen[64], gotoend[64], end[64];
-              
-              gen3(ifthen, "?:=", $4.begin, $2.place); // if true then statementlist
-              gen2(gotoend, ":=", $$.after); // else goto end
-
-              strcat($$.code, ifthen); // add the if
-              strcat($$.code, gotoend);// add the branch around
-              strcat($$.code, $4.code); // add the code for if
-
-              gen2(end, ":", $$.after); // declare ending label and add it
-              strcat($$.code, end);
+              //newlabel($$.begin);
+              //newlabel($$.after);
+              //gen2($$.code, ":", $$.begin); // declare label first
+              //strcat($$.code, $2.code); // add code to compute expression
+              //char ifthen[64], gotoend[64], end[64];
+              //gen3(ifthen, "?:=", $4.begin, $2.place); // if true then statementlist
+              //gen2(gotoend, ":=", $$.after); // else goto end
+              //strcat($$.code, ifthen); // add the if
+              //strcat($$.code, gotoend);// add the branch around
+              //strcat($$.code, $4.code); // add the code for if
+              //gen2(end, ":", $$.after); // declare ending label and add it
+              //strcat($$.code, end);
 
               if (verbose) {printf("statement -> if bool_exp then stmt_list endif\n");}
             }
           | IF bool_exp THEN stmt_list ELSE stmt_list ENDIF {
-              newlabel($$.begin); // stick with the convention of begin/place being names
-              newlabel($$.after); 
-              gen2($$.code, ":", $$.begin); // start with the new label
-              strcat($$.code, $2.code); // add code to compute the boolean
-              
-              char ifthen[64], elsethen[64], gotoend[64], end[64];
-              
-              gen3(ifthen, "?:=", $4.begin, $2.place); // brances
-              gen2(elsethen, ":=", $6.begin);
-              gen2(gotoend, ":=", $$.after);
-
-              strcat($$.code, ifthen);
-              strcat($$.code, elsethen);
-              strcat($$.code, $4.code);
-              strcat($$.code, gotoend);
-              strcat($$.code, $6.code);
-              
-              gen2(end, ":", $$.after);
-              strcat($$.code, end);
+              //newlabel($$.begin); // stick with the convention of begin/place being names
+              //newlabel($$.after); 
+              //gen2($$.code, ":", $$.begin); // start with the new label
+              //strcat($$.code, $2.code); // add code to compute the boolean
+              //char ifthen[64], elsethen[64], gotoend[64], end[64];
+              //gen3(ifthen, "?:=", $4.begin, $2.place); // brances
+              //gen2(elsethen, ":=", $6.begin);
+              //gen2(gotoend, ":=", $$.after);
+              //strcat($$.code, ifthen);
+              //strcat($$.code, elsethen);
+              //strcat($$.code, $4.code);
+              //strcat($$.code, gotoend);
+              //strcat($$.code, $6.code);
+              //gen2(end, ":", $$.after);
+              //strcat($$.code, end);
 
               if (verbose) {printf("statement -> if bool_exp then stmt_list else stmt_list endif\n");}
             }
@@ -214,19 +193,17 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
           ;
 
 bool_exp : relation_and_exp {
-            strcpy($$.place, $1.place);
-            strcpy($$.code, $1.code);
+            //strcpy($$.place, $1.place);
+            //strcpy($$.code, $1.code);
             if (verbose) {printf("bool_exp -> relation_and_exp\n");}
            }
          | bool_exp OR relation_and_exp {
-            newtemp($$.place);
-
-            char quad[16];
-            gen4(quad, "||", $$.place, $1.place, $3.place);
-
-            strcpy($$.code, $1.code);
-            strcat($$.code, $3.code);
-            strcat($$.code, quad);
+            //newtemp($$.place);
+            //char quad[16];
+            //gen4(quad, "||", $$.place, $1.place, $3.place);
+            //strcpy($$.code, $1.code);
+            //strcat($$.code, $3.code);
+            //strcat($$.code, quad);
             if (verbose) {printf("bool_exp -> bool_exp OR relation_and_exp\n");}
            }
          ;
@@ -237,137 +214,127 @@ relation_and_exp : relation_exp {
                     if (verbose) {printf("relation_and_exp -> relation_exp\n");}
                    }
                  | relation_and_exp AND relation_exp {
-                    newtemp($$.place);
-
-                    char quad[16];
-                    gen4(quad, "&&", $$.place, $1.place, $3.place);
-
-                    strcpy($$.code, $1.code);
-                    strcat($$.code, $3.code);
-                    strcat($$.code, quad);
+                    //newtemp($$.place);
+                    //char quad[16];
+                    //gen4(quad, "&&", $$.place, $1.place, $3.place);
+                    //strcpy($$.code, $1.code);
+                    //strcat($$.code, $3.code);
+                    //strcat($$.code, quad);
 
                     if (verbose) {printf("relation_and_exp -> relation_and_exp AND relation_exp\n");}
                    }
                  ;
 
 relation_expA : expression comp expression {
-                  newtemp($$.place);
-
-                  char quad[16];
-                  gen4(quad, $2, $$.place, $1.place, $3.place);
-
-                  strcpy($$.code, $1.code);
-                  strcat($$.code, $3.code);
-                  strcat($$.code, quad);
+                  //newtemp($$.place);
+                  //char quad[16];
+                  //gen4(quad, $2, $$.place, $1.place, $3.place);
+                  //strcpy($$.code, $1.code);
+                  //strcat($$.code, $3.code);
+                  //strcat($$.code, quad);
 
                   if (verbose) {printf("relation_exp' -> expression comp expression\n");}
                 }
               | TRUE {
-                  newtemp($$.place);
-                  gen3i($$.code, "=", $$.place, 1);
+                  //newtemp($$.place);
+                  //gen3i($$.code, "=", $$.place, 1);
                   if (verbose) {printf("relation_exp' -> TRUE\n");}
                 }
               | FALSE { 
-                newtemp($$.place);
-                gen3i($$.code, "=", $$.place, 0);
+                //newtemp($$.place);
+                //gen3i($$.code, "=", $$.place, 0);
                 if (verbose) {printf("relation_exp' -> FALSE\n");}
               }
               | L_PAREN bool_exp R_PAREN { 
-                  strcpy($$.place, $2.place);
-                  strcpy($$.code, $2.code);
+                  //strcpy($$.place, $2.place);
+                  //strcpy($$.code, $2.code);
                   if (verbose) {printf("relation_exp' -> (bool_exp)\n");}
                 }
               ;
 
 relation_exp : NOT relation_expA { 
-                strcpy($$.place, $2.place);
-                strcpy($$.code, $2.code);
-                
-                char signswitch[16];
-                gen3(signswitch, "!", $$.place, $$.place);
-                
-                strcat($$.code, signswitch);
-
+                //strcpy($$.place, $2.place);
+                //strcpy($$.code, $2.code);
+                //char signswitch[16];
+                //gen3(signswitch, "!", $$.place, $$.place);
+                //strcat($$.code, signswitch);
                 if (verbose) {printf("relation_exp -> not relation_exp'\n");}
                }
              | relation_expA {
-                strcpy($$.place, $1.place);
-                strcpy($$.code, $1.code);
+                //strcpy($$.place, $1.place);
+                //strcpy($$.code, $1.code);
                 if (verbose) {printf("relation_exp -> relation_exp'\n");}
                }
              ;
 
-comp : EQ  {strcpy($$, "=="); if (verbose) {printf("comp -> ==\n");}}
-     | NEQ {strcpy($$, "!="); if (verbose) {printf("comp -> <>\n");}}
-     | LTE {strcpy($$, "<="); if (verbose) {printf("comp -> <=\n");}}
-     | GTE {strcpy($$, ">="); if (verbose) {printf("comp -> >=\n");}}
-     | LT  {strcpy($$, "<"); if (verbose) {printf("comp-> < \n");}}
-     | GT  {strcpy($$, ">"); if (verbose) {printf("comp-> > \n");}}
+comp : EQ  {/*strcpy($$, "==");*/ if (verbose) {printf("comp -> ==\n");}}
+     | NEQ {/*strcpy($$, "!=");*/ if (verbose) {printf("comp -> <>\n");}}
+     | LTE {/*strcpy($$, "<=");*/ if (verbose) {printf("comp -> <=\n");}}
+     | GTE {/*strcpy($$, ">=");*/ if (verbose) {printf("comp -> >=\n");}}
+     | LT  {/*strcpy($$, "<"); */if (verbose) {printf("comp-> < \n");}}
+     | GT  {/*strcpy($$, ">"); */if (verbose) {printf("comp-> > \n");}}
      ;
 
 m_exp : term { 
-          strcpy($$.place, $1.place);
-          strcpy($$.code, $1.code);
+          //strcpy($$.place, $1.place);
+          //strcpy($$.code, $1.code);
           if (verbose) {printf("multiplicative_exp -> term\n");}
         }
       | m_exp MULT term { 
-          newtemp($$.place);
-          char quad[16];
-          gen4(quad, "*", $$.place, $1.place, $3.place);
-          
-          strcpy($$.code, $1.code);
-          strcat($$.code, $3.code);
-          strcat($$.code, quad);
+          //newtemp($$.place);
+          //char quad[16];
+          //gen4(quad, "*", $$.place, $1.place, $3.place);
+          //strcpy($$.code, $1.code);
+          //strcat($$.code, $3.code);
+          //strcat($$.code, quad);
 
           if (verbose) {printf("multiplicative_exp -> multiplicative_exp * term\n");}
         }
       | m_exp DIV term { 
-          newtemp($$.place);
-          char quad[16];
-          gen4(quad, "/", $$.place, $1.place, $3.place);
-          
-          strcpy($$.code, $1.code);
-          strcat($$.code, $3.code);
-          strcat($$.code, quad);
+          //newtemp($$.place);
+          //char quad[16];
+          //gen4(quad, "/", $$.place, $1.place, $3.place);
+          //strcpy($$.code, $1.code);
+          //strcat($$.code, $3.code);
+          //strcat($$.code, quad);
           if (verbose) {printf("multiplicative_exp -> multiplicative_exp / term\n");}
         }
       | m_exp MOD term { 
-          newtemp($$.place);
-          char quad[16];
-          gen4(quad, "%", $$.place, $1.place, $3.place);
-          
-          strcpy($$.code, $1.code);
-          strcat($$.code, $3.code);
-          strcat($$.code, quad);
+          //newtemp($$.place);
+          //char quad[16];
+          //gen4(quad, "%", $$.place, $1.place, $3.place);
+          //strcpy($$.code, $1.code);
+          //strcat($$.code, $3.code);
+          //strcat($$.code, quad);
           if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}
         }
       ;
 
 expression : m_exp { 
-              strcpy($$.place, $1.place);
-              strcpy($$.code, $1.code);
+              //strcpy($$.place, $1.place);
+              //strcpy($$.code, $1.code);
               if (verbose) {printf("expression -> multiplicative_exp\n");}
              }
            | expression ADD m_exp {
-              newtemp($$.place);
-
-              char quad[16];
-              gen4(quad, "+", $$.place, $1.place, $3.place); 
-
-              strcpy($$.code, $1.code);
-              strcat($$.code, $3.code);
-              strcat($$.code, quad);
+              //newtemp($$.place);
+//
+              //char quad[16];
+              //gen4(quad, "+", $$.place, $1.place, $3.place); 
+//
+              //strcpy($$.code, $1.code);
+              //strcat($$.code, $3.code);
+              //strcat($$.code, quad);
               if (verbose) {printf("expression -> expression + multiplicative_exp\n");}
              }
            | expression SUB m_exp {
-                newtemp($$.place);
+                //newtemp($$.place);
                 
-                char quad[16];
-                gen4(quad, "-", $$.place, $1.place, $3.place); 
+                //char quad[16];
+                //gen4(quad, "-", $$.place, $1.place, $3.place); 
 
-                strcpy($$.code, $1.code);
-                strcat($$.code, $3.code);
-                strcat($$.code, quad);
+                //strcpy($$.code, $1.code);
+                //strcat($$.code, $3.code);
+                //strcat($$.code, quad);
                 if (verbose) {printf("expression -> expression - multiplicative_exp\n");}
              }
            ;
@@ -375,31 +342,31 @@ expression : m_exp {
 
 var : IDENT L_BRACKET expression R_BRACKET {
         // name and type will already be in symtab, pass (name,index) along as string
-        sprintf($$, "%s,%s", $1, $3.place); // id, index
+        //sprintf($$, "%s,%s", $1, $3.place); // id, index
         if (verbose) {printf("var -> ident[expression]\n");}
       }
 
     | IDENT {
         // name and type will already be in symtab, pass name along
-        strcpy($$, $1);
-        printf("%s\n",$$); // id
+        //strcpy($$, $1);
+        //printf("%s\n",$$); // id
         if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
       }
     ;
 
 term : SUB termA {
-          strcpy($$.place, $2.place);
+          //strcpy($$.place, $2.place);
           // code to calculate the term plus `concat` sign switch
-          strcpy($$.code, $2.code);
-          char signswitch[16];
-          gen4i(signswitch, "*", $$.place, $$.place, -1);
-          strcat($$.code, signswitch);
+          //strcpy($$.code, $2.code);
+          //char signswitch[16];
+          //gen4i(signswitch, "*", $$.place, $$.place, -1);
+          //strcat($$.code, signswitch);
 
           if (verbose) {printf("term -> SUB term'\n");}
        }
      | termA {
-          strcpy($$.place, $1.place);
-          strcpy($$.code, $1.code);
+          //strcpy($$.place, $1.place);
+          //strcpy($$.code, $1.code);
           if (verbose) {printf("term -> term'\n");}
        }
      ;
@@ -410,12 +377,12 @@ termA : var { // when var becomes a term, we only want the value currently in it
           if (index) {
             if (symtab_entry_is_int(index)) {
               // avoid making new temp since variable already declared
-              strcpy($$.place,$1);
-              strcpy($$.code,"");
+              //strcpy($$.place,$1);
+              //strcpy($$.code,"");
             } else {
               // newtemp to extract value at index
-              newtemp($$.place);
-              gen3($$.code, "=[]", $$.place, $1 ); // $1 has "name,index"
+              //newtemp($$.place);
+              //gen3($$.code, "=[]", $$.place, $1 ); // $1 has "name,index"
             }
           } else {
             // handle error
@@ -424,15 +391,15 @@ termA : var { // when var becomes a term, we only want the value currently in it
           if (verbose) {printf("term' -> var \n");}
         }
       | NUMBER {
-          int imm = $1;
-          newtemp($$.place);
-          gen3i($$.code, "=", $$.place, imm);
-          //printf("%s", $$.code);
+          //int imm = $1;
+          //newtemp($$.place);
+          //gen3i($$.code, "=", $$.place, imm);
+          
           if (verbose) {printf("term' -> NUMBER \n");}
         }
       | L_PAREN expression R_PAREN {
-          strcpy($$.place, $2.place);
-          strcpy($$.code,$2.code);
+          //strcpy($$.place, $2.place);
+          //strcpy($$.code,$2.code);
           if (verbose) {printf("term' -> (expression)\n");}
         }
       ;
