@@ -302,42 +302,42 @@ comp : EQ  {
         strcpy($$, "=="); 
         if (verbose) {
           printf("comp -> ==\n");
-          printf("%s\n\n", $$.code);
+          printf("%s\n\n", $$);
         }
        }
      | NEQ {
         strcpy($$, "!="); 
         if (verbose) {
           printf("comp -> <>\n");
-          printf("%s\n\n", $$.code);
+          printf("%s\n\n", $$);
         }
        }
      | LTE {
         strcpy($$, "<="); 
         if (verbose) {
           printf("comp -> <=\n");
-          printf("%s\n\n", $$.code);
+          printf("%s\n\n", $$);
         }
        }
      | GTE {
         strcpy($$, ">="); 
         if (verbose) {
           printf("comp -> >=\n");
-          printf("%s\n\n", $$.code);
+          printf("%s\n\n", $$);
         }
        }
      | LT  {
         strcpy($$, "<"); 
         if (verbose) {
           printf("comp-> < \n");
-          printf("%s\n\n", $$.code);
+          printf("%s\n\n", $$);
         }
        }
      | GT  {
         strcpy($$, ">"); 
         if (verbose) {
           printf("comp-> > \n");
-          printf("%s\n\n", $$.code);
+          printf("%s\n\n", $$);
         }
        }
      ;
