@@ -104,11 +104,11 @@ elif_list : ELSEIF bool_exp stmt_list {
               gen3(ifthen, "?:=", $3.begin, $2.place );
               gen2(gotoend, ":=", $$.after);
 
-              strcat($$.code, if);
+              strcat($$.code, ifthen);
               strcat($$.code, gotoend);
               strcat($$.code, $3.code);
 
-              gen3(end, ":", $$.after) 
+              gen2(end, ":", $$.after);
               strcat($$.code, end);             
 
               if (verbose) {printf("elif_list -> elseif bool_exp stmt_list\n");}
@@ -125,11 +125,11 @@ elif_list : ELSEIF bool_exp stmt_list {
               gen3(ifthen, "?:=", $3.begin, $2.place );
               gen2(gotoend, ":=", $$.after);
 
-              strcat($$.code, if);
+              strcat($$.code, ifthen);
               strcat($$.code, gotoend);
               strcat($$.code, $3.code);
 
-              gen3(end, ":", $$.after) 
+              gen2(end, ":", $$.after); 
               strcat($$.code, end);
 
               strcat($$.code, $4.code); // is that really all?
@@ -170,10 +170,10 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
 
               char ifthen[64], gotoend[64], end[64];
               
-              gen3(ifthen, "?:=", $4.begin, $2.place) // if true then statementlist
+              gen3(ifthen, "?:=", $4.begin, $2.place); // if true then statementlist
               gen2(gotoend, ":=", $$.after); // else goto end
 
-              strcat($$.code, if); // add the if
+              strcat($$.code, ifthen); // add the if
               strcat($$.code, gotoend);// add the branch around
               strcat($$.code, $4.code); // add the code for if
 
@@ -188,14 +188,14 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               gen2($$.code, ":", $$.begin); // start with the new label
               strcat($$.code, $2.code); // add code to compute the boolean
               
-              char ifthen[64], else[64], gotoend[64], end[64];
+              char ifthen[64], elsethen[64], gotoend[64], end[64];
               
-              gen3(ifthen, "?:=", $4.begin, $2.place) // brances
-              gen2(else, ":=", $6.begin);
+              gen3(ifthen, "?:=", $4.begin, $2.place); // brances
+              gen2(elsethen, ":=", $6.begin);
               gen2(gotoend, ":=", $$.after);
 
-              strcat($$.code, if);
-              strcat($$.code, else);
+              strcat($$.code, ifthen);
+              strcat($$.code, elsethen);
               strcat($$.code, $4.code);
               strcat($$.code, gotoend);
               strcat($$.code, $6.code);
