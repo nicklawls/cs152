@@ -157,17 +157,60 @@ elif_list : ELSEIF bool_exp stmt_list {
           
           ;
 
-stmt_list : statement SEMICOLON {if (verbose) {printf("stmt_list -> statement;\n");}}
-          | statement SEMICOLON stmt_list {if (verbose) {printf("stmt_list -> statement; stmt_list\n");}}
-          ;
+stmt_list : statement SEMICOLON {
+              strcpy($$.begin, $1.begin);
+              strcpy($$.after, $1.after);
 
-var_list : var {if (verbose) {printf("var_list -> var\n");}}
-         | var COMMA var_list {if (verbose) {printf("var_list -> var, var_list\n");}}
+              strcat($$.code, $1.code);
+
+              if (verbose) {
+                printf("stmt_list -> statement;\n");
+                printf("%s\n\n", $$.code);
+              }
+            }
+          | statement SEMICOLON stmt_list {
+              strcpy($$.begin,$1.begin)
+              strcpy($$.after,$3.after)
+              strcat($$.code, $1.code)
+              strcat($$.code, $3.code);
+
+              if (verbose) {
+                printf("stmt_list -> statement; stmt_list\n");
+                printf("%s\n\n", $$.code);
+              }
+          }
+          | statement SEMICOLON BREAK SEMICOLON stmt_list  {
+              strcpy($$.begin, $1.begin);
+              strcpy($$.after, $5.after);
+              strcat($$.code, $1.code);
+              char jumpout[16];
+              gen2(jumpout, ":=", $$.after);
+              strcat($$.code, jumpout);
+              strcat($$.code, $5.code);
+
+              if (verbose) {
+                printf("stmt_list -> statement; break; stmt_list\n");
+              }
+            }
+       // Correctly ignores stmt_lists ending in break, redundant
+       // | statement SEMICOLON BREAK SEMICOLON {}
+          ;
+       }
+
+var_list : var {
+            if (verbose) {
+              printf("var_list -> var\n");
+            }
+          }
+         | var COMMA var_list {
+            if (verbose) {
+              printf("var_list -> var, var_list\n");
+            }
+        }
          ;
 
 statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
           | CONTINUE {if (verbose) {printf("statement -> continue\n");}}
-          | BREAK {if (verbose) {printf("statement -> break\n");}}
           | READ var_list {if (verbose) {printf("statement -> read var_list\n");}}
           | WRITE var_list {if (verbose) {printf("statement -> write var_list\n");}}
           | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
