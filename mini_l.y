@@ -15,15 +15,15 @@
   char* strval;
   struct expr {
     char place[8];
-    char code[16];
+    char code[256];
     } expr;
   struct stmt {
-    char begin[8];
-    char code[16];
-    char after[8];
+    char begin[16];
+    char code[256];
+    char after[256];
     } stmt; 
   struct strlist {
-    char list[8][8];
+    char list[16][16];
     int length;
   } strlist;
 
@@ -48,15 +48,15 @@
 
 
 
-%type <strval> expression
-%type <strval> term termA
-%type <strval> m_exp relation_exp relation_expA
-%type <strval> relation_and_exp bool_exp 
+%type <expr> expression
+%type <expr> term termA
+%type <expr> m_exp relation_exp relation_expA
+%type <expr> relation_and_exp bool_exp 
 %type <strval> comp var  
-%type <strval> var_list id_list
-%type <strval> statement stmt_list decl_list elif_list
-%type <strval> block  
-%type <strval> Program declaration
+%type <strlist> var_list id_list
+%type <stmt> statement stmt_list decl_list elif_list
+%type <stmt> block  
+%type <stmt> Program declaration
 
 
 
