@@ -96,7 +96,7 @@ elif_list : ELSEIF bool_exp stmt_list {
               newlabel($$.begin);
               newlabel($$.after);
               gen2($$.code, ":", $$.begin); // declare label first
-              strcpy($$.code, $2.code); // add code to compute expression
+              strcat($$.code, $2.code); // add code to compute expression
               char ifthen[64], gotoend[64], end[64];
               gen3(ifthen, "?:=", $3.begin, $2.place );
               gen2(gotoend, ":=", $$.after);
@@ -112,6 +112,22 @@ elif_list : ELSEIF bool_exp stmt_list {
               }
             }
           | ELSEIF bool_exp stmt_list ELSE stmt_list {
+              newlabel($$.begin);
+              newlabel($$.after);
+              gen2($$.code, ":", $$.begin);
+              strcpy($$.code, $2.code);
+              char ifthen[64], elsethen[64], gotoend[64], end[64];
+              gen3(ifthen, "?:=", $3.begin, $2.place);
+              strcat($$.code, ifthen);
+              gen2(elsethen, ":=", $5.begin);
+              strcat($$.code, elsethen);
+              strcat($$.code, $3.code);
+              gen2(gotoend, ":=", $$.after);
+              strcat($$.code, gotoend);
+              strcat($$.code, $5.code);
+              gen2(end, ":", $$.after);
+              strcat($$.code, end);
+              
               if (verbose) {
                 printf("elif_list -> elseif bool_exp stmt_list ELSE stmt_list\n");
                 printf("%s\n\n", $$.code);
@@ -121,7 +137,7 @@ elif_list : ELSEIF bool_exp stmt_list {
               newlabel($$.begin);
               strcpy($$.after, $4.after);
               gen2($$.code, ":", $$.begin); // declare label first
-              strcpy($$.code, $2.code); // add code to compute expression
+              strcat($$.code, $2.code); // add code to compute expression
               char ifthen[64], gotonext[64], gotoend[64];
               gen3(ifthen, "?:=", $3.begin, $2.place );
               strcat($$.code, ifthen); // if its a hit, execute stmt_list and go to the very end
@@ -167,7 +183,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               newlabel($$.begin);
               newlabel($$.after);
               gen2($$.code, ":", $$.begin); // declare label first
-              strcpy($$.code, $2.code); // add code to compute expression
+              strcat($$.code, $2.code); // add code to compute expression
               char ifthen[64], gotoend[64], end[64];
               gen3(ifthen, "?:=", $4.begin, $2.place); // if true then statementlist
               gen2(gotoend, ":=", $$.after); // else goto end
@@ -186,7 +202,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               newlabel($$.begin); // stick with the convention of begin/place being names
               newlabel($$.after); 
               gen2($$.code, ":", $$.begin); // start with the new label
-              strcpy($$.code, $2.code); // add code to compute the boolean
+              strcat($$.code, $2.code); // add code to compute the boolean
               char ifthen[64], elsethen[64], gotoend[64], end[64];
               gen3(ifthen, "?:=", $4.begin, $2.place); // brances
               gen2(elsethen, ":=", $6.begin);
@@ -208,7 +224,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               newlabel($$.begin);
               strcpy($$.after, $5.after);
               gen2($$.code, ":", $$.begin); // start with the new label
-              strcpy($$.code, $2.code); // add code to compute the boolean
+              strcat($$.code, $2.code); // add code to compute the boolean
               char ifthen[64], gotonext[64], gotoend[64];
               gen3(ifthen, "?:=", $4.begin, $2.place);
               strcat($$.code, ifthen);
