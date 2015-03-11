@@ -7,7 +7,7 @@
   extern int yylineno;
   extern int yycolumno;
   FILE* yyin;
-  int verbose = 0;
+  int verbose = 1;
 %}
 
 %union{
@@ -182,22 +182,6 @@ stmt_list : statement SEMICOLON {
                 printf("%s\n\n", $$.code);
               }
           }
-          | statement SEMICOLON BREAK SEMICOLON stmt_list  {
-              strcpy($$.begin, $1.begin);
-              strcpy($$.after, $5.after);
-              strcat($$.code, $1.code);
-              char jumpout[16];
-              gen2(jumpout, ":=", $$.after);
-              strcat($$.code, jumpout);
-              strcat($$.code, $5.code);
-
-              if (verbose) {
-                printf("stmt_list -> statement; break; stmt_list\n");
-                printf("%s\n\n", $$.code);
-              }
-            }
-       // Correctly ignores stmt_lists ending in break, redundant
-       // | statement SEMICOLON BREAK SEMICOLON {}
           ;
 
 
@@ -236,6 +220,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
                 printf("%s\n\n", $$.code);
               }
             }
+          
           | WHILE bool_exp BEGINLOOP stmt_list ENDLOOP {
               newlabel($$.begin);
               newlabel($$.after);
@@ -654,12 +639,6 @@ int main (const int argc, const char** argv) {
       printf("syntax: %s filename\n", argv[0]);
       exit(1);
     }
-  }
-
-  if (1) {
-    printf("A\n");
-    continue;
-    printf("B\n");
   }
   
   symtab_init();
