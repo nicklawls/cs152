@@ -123,7 +123,7 @@ INVALID_IDENT {DIGIT}+{IDENTIFIER}_*|{DIGIT}*{IDENTIFIER}_+
 		} 
 	} 
 	
-	yylval.strval = strdup(yytext); // try to change back to strcpy when debugable
+	strcpy(yylval.strval,yytext); // try to change back to strcpy when debugable
 	return IDENT;
 }
 
