@@ -306,36 +306,43 @@ m_exp : term {
           //strcpy($$.code, $1.code);
           //strcat($$.code, $3.code);
           //strcat($$.code, quad);
-          if (verbose) {printf("multiplicative_exp -> multiplicative_exp modulo term\n");}
+          if (verbose) {
+            printf("multiplicative_exp -> multiplicative_exp modulo term\n");
+            //printf("%s\n\n", $$.code);
+          }
         }
       ;
 
 expression : m_exp { 
-              //strcpy($$.place, $1.place);
-              //strcpy($$.code, $1.code);
+              strcpy($$.place, $1.place);
+              strcpy($$.code, $1.code);
               if (verbose) {printf("expression -> multiplicative_exp\n");}
              }
            | expression ADD m_exp {
-              //newtemp($$.place);
-//
-              //char quad[16];
-              //gen4(quad, "+", $$.place, $1.place, $3.place); 
-//
-              //strcpy($$.code, $1.code);
-              //strcat($$.code, $3.code);
-              //strcat($$.code, quad);
-              if (verbose) {printf("expression -> expression + multiplicative_exp\n");}
+              newtemp($$.place);
+              char quad[16];
+              gen4(quad, "+", $$.place, $1.place, $3.place); 
+              strcpy($$.code, $1.code);
+              strcat($$.code, $3.code);
+              strcat($$.code, quad);
+              
+              if (verbose) {
+                printf("expression -> expression + multiplicative_exp\n");
+                printf("%s\n\n", $$.code);
+              }
              }
            | expression SUB m_exp {
-                //newtemp($$.place);
+                newtemp($$.place);
+                char quad[16];
+                gen4(quad, "-", $$.place, $1.place, $3.place); 
+                strcpy($$.code, $1.code);
+                strcat($$.code, $3.code);
+                strcat($$.code, quad);
                 
-                //char quad[16];
-                //gen4(quad, "-", $$.place, $1.place, $3.place); 
-
-                //strcpy($$.code, $1.code);
-                //strcat($$.code, $3.code);
-                //strcat($$.code, quad);
-                if (verbose) {printf("expression -> expression - multiplicative_exp\n");}
+                if (verbose) {
+                  printf("expression -> expression - multiplicative_exp\n");
+                  printf("%s\n\n", $$.code);
+                }
              }
            ;
 
@@ -343,6 +350,7 @@ expression : m_exp {
 var : IDENT L_BRACKET expression R_BRACKET {
         // name and type will already be in symtab, pass (name,index) along as string
         sprintf($$, "%s,%s", $1, $3.place); // id, index
+        
         if (verbose) {
           printf("var -> ident[expression]\n");
           printf("%s\n\n",$$);
@@ -356,7 +364,7 @@ var : IDENT L_BRACKET expression R_BRACKET {
         if (verbose) {
           printf("var -> ident %s\n", $1);
           printf("%s\n\n",$$); // id
-        } // not printing $1 for some reason
+        } 
       }
     ;
 
@@ -368,12 +376,19 @@ term : SUB termA {
           gen4i(signswitch, "*", $$.place, $$.place, -1);
           strcat($$.code, signswitch);
 
-          if (verbose) {printf("term -> SUB term'\n");}
+          if (verbose) {
+            printf("term -> SUB term'\n");
+            printf("%s\n\n", $$.code);
+          }
        }
      | termA {
           strcpy($$.place, $1.place);
           strcpy($$.code, $1.code);
-          if (verbose) {printf("term -> term'\n");}
+          
+          if (verbose) {
+            printf("term -> term'\n");
+            printf("%s\n\n", $$.code);
+          }
        }
      ;
 
