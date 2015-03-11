@@ -36,8 +36,6 @@ void newtemp(char* dst) {
     };
     ++tmpcount; // do the next one for later
     symtab_put(dst, 0); // temps are always int
-    printf("newtemp ended\n");
-
 }
 
 void newlabel(char* dst) {
