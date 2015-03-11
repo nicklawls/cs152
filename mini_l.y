@@ -342,31 +342,37 @@ expression : m_exp {
 
 var : IDENT L_BRACKET expression R_BRACKET {
         // name and type will already be in symtab, pass (name,index) along as string
-        //sprintf($$, "%s,%s", $1, $3.place); // id, index
-        if (verbose) {printf("var -> ident[expression]\n");}
+        sprintf($$, "%s,%s", $1, $3.place); // id, index
+        if (verbose) {
+          printf("var -> ident[expression]\n");
+          printf("%s\n",$$);
+        }
       }
 
     | IDENT {
         // name and type will already be in symtab, pass name along
-        //strcpy($$, $1);
-        //printf("%s\n",$$); // id
-        if (verbose) {printf("var -> ident %s\n", $1);} // not printing $1 for some reason
+        strcpy($$, $1);
+        
+        if (verbose) {
+          printf("var -> ident %s\n", $1);
+          printf("%s\n",$$); // id
+        } // not printing $1 for some reason
       }
     ;
 
 term : SUB termA {
-          //strcpy($$.place, $2.place);
+          strcpy($$.place, $2.place);
           // code to calculate the term plus `concat` sign switch
-          //strcpy($$.code, $2.code);
-          //char signswitch[16];
-          //gen4i(signswitch, "*", $$.place, $$.place, -1);
-          //strcat($$.code, signswitch);
+          strcpy($$.code, $2.code);
+          char signswitch[16];
+          gen4i(signswitch, "*", $$.place, $$.place, -1);
+          strcat($$.code, signswitch);
 
           if (verbose) {printf("term -> SUB term'\n");}
        }
      | termA {
-          //strcpy($$.place, $1.place);
-          //strcpy($$.code, $1.code);
+          strcpy($$.place, $1.place);
+          strcpy($$.code, $1.code);
           if (verbose) {printf("term -> term'\n");}
        }
      ;
