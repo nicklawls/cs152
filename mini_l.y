@@ -372,35 +372,44 @@ term : SUB termA {
      ;
 
 termA : var { // when var becomes a term, we only want the value currently in it
-          //int index = symtab_get($1);
+          int index = symtab_get($1);
           // handle both the int and array cases
-          //if (index) {
-            //if (symtab_entry_is_int(index)) {
+          if (index) {
+            if (symtab_entry_is_int(index)) {
               // avoid making new temp since variable already declared
-              //strcpy($$.place,$1);
-              //strcpy($$.code,"");
-            //} else {
+              strcpy($$.place,$1);
+              strcpy($$.code,"");
+            } else {
               // newtemp to extract value at index
-              //newtemp($$.place);
-              //gen3($$.code, "=[]", $$.place, $1 ); // $1 has "name,index"
-            //}
-          //} else {
-            // handle error
-          //}
+              newtemp($$.place);
+              gen3($$.code, "=[]", $$.place, $1 ); // $1 has "name,index"
+            }
+          } else {
+            yyerror("attempted to retrieve a symbol not in table\n");
+          }
 
-          if (verbose) {printf("term' -> var \n");}
+          if (verbose) {
+            printf("term' -> var \n");
+            printf("%s\n", $$.code);
+          }
         }
       | NUMBER {
-          //int imm = $1;
-          //newtemp($$.place);
-          //gen3i($$.code, "=", $$.place, imm);
+          int imm = $1;
+          newtemp($$.place);
+          gen3i($$.code, "=", $$.place, imm);
           
-          if (verbose) {printf("term' -> NUMBER \n");}
+          if (verbose) {
+            printf("term' -> NUMBER \n");
+            printf("%s\n", $$.code);
+          }
         }
       | L_PAREN expression R_PAREN {
-          //strcpy($$.place, $2.place);
-          //strcpy($$.code,$2.code);
-          if (verbose) {printf("term' -> (expression)\n");}
+          strcpy($$.place, $2.place);
+          strcpy($$.code,$2.code);
+          if (verbose) {
+            printf("term' -> (expression)\n");
+            printf("%s\n", $$.code);
+          }
         }
       ;
 
