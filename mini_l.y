@@ -656,9 +656,9 @@ int main (const int argc, const char** argv) {
     }
   }
 
-  if (true) {
+  if (1) {
     printf("A\n");
-    break;
+    continue;
     printf("B\n");
   }
   
