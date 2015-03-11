@@ -19,7 +19,7 @@
     } expr;
   struct stmt {
     char begin[16];
-    char code[1024];
+    char code[2048];
     char after[256];
     } stmt; 
   struct strlist {
