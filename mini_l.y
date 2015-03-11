@@ -15,15 +15,15 @@
   char* strval;
   struct expr {
     char place[8];
-    char code[256];
+    char code[512];
     } expr;
   struct stmt {
     char begin[16];
-    char code[256];
+    char code[512];
     char after[256];
     } stmt; 
   struct strlist {
-    char list[16][16];
+    char list[256][256];
     int length;
   } strlist;
 
