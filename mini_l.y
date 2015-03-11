@@ -171,7 +171,19 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
           | READ var_list {if (verbose) {printf("statement -> read var_list\n");}}
           | WRITE var_list {if (verbose) {printf("statement -> write var_list\n");}}
           | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
-                
+              newlabel($$.begin);
+              newlabel($$.after);
+
+              gen2($$.code, ":", $$.begin);
+              strcat($$.code, $3.code);
+
+              char loop[64], end[64];
+              gen3(loop, "?:=", $$.begin, $6.place);
+              strcat($$.code, loop);
+              
+              gen2(end, ":", $$.after);
+              strcat($$.code, end);
+
               if (verbose) {
                 printf("statement -> do beginloop stmt_list endloop while bool_exp\n");
               }
@@ -186,7 +198,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               gen3(endloop, "?:=", $$.after, $2.place);
               strcat($$.code, endloop);
 
-              strcat($$.code, $4.begin);
+              strcat($$.code, $4.code);
 
               gen2(loop, ":=", $$.begin); // loop back
               strcat($$.code, loop);
