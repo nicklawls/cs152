@@ -96,7 +96,7 @@ elif_list : ELSEIF bool_exp stmt_list {
               newlabel($$.begin);
               newlabel($$.after);
               gen2($$.code, ":", $$.begin); // declare label first
-              strcat($$.code, $2.code); // add code to compute expression
+              strcpy($$.code, $2.code); // add code to compute expression
               char ifthen[64], gotoend[64], end[64];
               gen3(ifthen, "?:=", $3.begin, $2.place );
               gen2(gotoend, ":=", $$.after);
@@ -113,18 +113,18 @@ elif_list : ELSEIF bool_exp stmt_list {
             }
           | ELSEIF bool_exp stmt_list elif_list {
               newlabel($$.begin);
-              newlabel($$.after);
+              strcpy($$.after, $4.after);
               gen2($$.code, ":", $$.begin); // declare label first
-              strcat($$.code, $2.code); // add code to compute expression
-              char ifthen[64], gotoend[64], end[64];
+              strcpy($$.code, $2.code); // add code to compute expression
+              char ifthen[64], gotonext[64], gotoend[64];
               gen3(ifthen, "?:=", $3.begin, $2.place );
-              gen2(gotoend, ":=", $$.after);
-              strcat($$.code, ifthen);
-              strcat($$.code, gotoend);
-              strcat($$.code, $3.code);
-              gen2(end, ":", $$.after); 
-              strcat($$.code, end);
-              strcat($$.code, $4.code); // is that really all?
+              strcat($$.code, ifthen); // if its a hit, execute stmt_list and go to the very end
+              gen2(gotonext, ":=", $4.begin); 
+              strcat($$.code, gotonext); // if not a hit, skip to next elif
+              strcat($$.code, $3.code); // code for statement list
+              gen2(gotoend, ":=", $$.after)
+              strcat($$.code, gotoend); // skip to the very end when done
+              strcat($$.code, $4.code); // rest of the list
               
               if (verbose) {
                 printf("elif_list -> elseif bool_exp stmt_list elif_list\n");
@@ -160,7 +160,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               newlabel($$.begin);
               newlabel($$.after);
               gen2($$.code, ":", $$.begin); // declare label first
-              strcat($$.code, $2.code); // add code to compute expression
+              strcpy($$.code, $2.code); // add code to compute expression
               char ifthen[64], gotoend[64], end[64];
               gen3(ifthen, "?:=", $4.begin, $2.place); // if true then statementlist
               gen2(gotoend, ":=", $$.after); // else goto end
@@ -179,7 +179,7 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               newlabel($$.begin); // stick with the convention of begin/place being names
               newlabel($$.after); 
               gen2($$.code, ":", $$.begin); // start with the new label
-              strcat($$.code, $2.code); // add code to compute the boolean
+              strcpy($$.code, $2.code); // add code to compute the boolean
               char ifthen[64], elsethen[64], gotoend[64], end[64];
               gen3(ifthen, "?:=", $4.begin, $2.place); // brances
               gen2(elsethen, ":=", $6.begin);
@@ -198,10 +198,31 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
               }
             }
           | IF bool_exp THEN stmt_list elif_list ENDIF {
-                if (verbose) {printf("statement -> if bool_exp then stmt_list elif_list endif\n");}
+              newlabel($$.begin);
+              strcpy($$.after, $5.after);
+              gen2($$.code, ":", $$.begin); // start with the new label
+              strcpy($$.code, $2.code); // add code to compute the boolean
+              char ifthen[64], gotonext[64], gotoend[64];
+              gen3(ifthen, "?:=", $4.begin, $2.place);
+              strcat($$.code, ifthen);
+              gen2(gotonext, ":=", $5.begin);
+              strcat($$.code, gotonext);
+              strcat($$.code, $4.code);
+              gen2(gotoend, ":=", $$.after);
+              strcat($$.code, gotoend);
+              strcat($$.code, $5.code);
+              if (verbose) {
+                printf("statement -> if bool_exp then stmt_list elif_list endif\n");
+                printf("%s\n\n", $$.code);
+              }
             }
           | IF bool_exp THEN stmt_list elif_list ELSE stmt_list ENDIF {
-                if (verbose) {printf("statement -> if bool_exp then stmt_list elif_list else stmt_list endif\n");}
+              // if boo then stmt_list and skip to end
+              // else, do elif list, if no hits, do else
+              if (verbose) {
+                printf("statement -> if bool_exp then stmt_list elif_list else stmt_list endif\n");
+                printf("%s\n\n", $$.code);
+              }
             }
           ;
 
