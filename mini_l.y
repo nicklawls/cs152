@@ -87,6 +87,7 @@ declaration : id_list COLON INTEGER {if (verbose) {printf("declaration -> id_lis
             ;
 
 id_list : IDENT {
+
             if (verbose) {printf("id_list -> ident\n");}
           }
         | IDENT COMMA id_list {if (verbose) {printf("id_list -> ident, id_list\n");}}
@@ -127,7 +128,7 @@ elif_list : ELSEIF bool_exp stmt_list {
               strcat($$.code, $5.code);
               gen2(end, ":", $$.after);
               strcat($$.code, end);
-              
+
               if (verbose) {
                 printf("elif_list -> elseif bool_exp stmt_list ELSE stmt_list\n");
                 printf("%s\n\n", $$.code);
@@ -170,10 +171,32 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
           | READ var_list {if (verbose) {printf("statement -> read var_list\n");}}
           | WRITE var_list {if (verbose) {printf("statement -> write var_list\n");}}
           | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
-                if (verbose) {printf("statement -> do beginloop stmt_list endloop while bool_exp\n");}
+                
+              if (verbose) {
+                printf("statement -> do beginloop stmt_list endloop while bool_exp\n");
+              }
             }
           | WHILE bool_exp BEGINLOOP stmt_list ENDLOOP {
-                if (verbose) {printf("statement -> while bool_exp beginloop stmt_list endloop\n");}
+              newlabel($$.begin);
+              newlabel($$.after);
+
+              gen2($$.code, ":", $$.begin);
+              char endloop[64], loop[64], end[64];
+
+              gen3(endloop, "?:=", $$.after, $2.place);
+              strcat($$.code, endloop);
+
+              strcat($$.code, $4.begin);
+
+              gen2(loop, ":=", $$.begin); // loop back
+              strcat($$.code, loop);
+
+              gen2(end, ":", $$.after);
+              strcat($$.code, end);
+
+              if (verbose) {
+                printf("statement -> while bool_exp beginloop stmt_list endloop\n");
+              }
             }
           | var ASSIGN expression {if (verbose) {printf("statement -> var := expression\n");}}
           | var ASSIGN bool_exp QUESTION expression COLON expression {
@@ -239,16 +262,6 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
                 printf("%s\n\n", $$.code);
               }
             }
-          /*| IF bool_exp THEN stmt_list elif_list ELSE stmt_list ENDIF {
-              // if boo then stmt_list and skip to end
-              // else, do elif list, if no hits, do else
-
-
-              if (verbose) {
-                printf("statement -> if bool_exp then stmt_list elif_list else stmt_list endif\n");
-                printf("%s\n\n", $$.code);
-              }
-            }*/
           ;
 
 bool_exp : relation_and_exp {
