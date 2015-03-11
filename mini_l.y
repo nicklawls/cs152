@@ -53,7 +53,7 @@
 %type <strval> m_exp relation_exp relation_expA
 %type <strval> relation_and_exp bool_exp 
 %type <strval> comp var  
-%type <strlist> var_list id_list
+%type <strval> var_list id_list
 %type <strval> statement stmt_list decl_list elif_list
 %type <strval> block  
 %type <strval> Program declaration
