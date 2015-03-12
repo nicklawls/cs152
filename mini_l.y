@@ -295,13 +295,13 @@ statement : EXIT {
                 newlabel(optionA);
                 newlabel(optionB);
                 newlabel($$.after);                
-                strcat($$.code, $3.code, ); // compute expr
-                char ifthen[32], elsethen[32], toend[32], A[8], B[8] end[32];  
+                strcat($$.code, $3.code); // compute expr
+                char ifthen[32], elsethen[32], toend[32], A[8], B[8], end[32];  
                 gen3(ifthen, "?:=", optionA, $3.place);
                 strcat($$.code, ifthen);
                 gen2(elsethen, ":=", optionB);
                 strcat($$.code, elsethen);
-                gen2(A, ":", optionA)
+                gen2(A, ":", optionA);
                 strcat($$.code, A);
                 strcat($$.code, $5.code);
                 if(symtab_entry_is_int(index)) {
@@ -310,8 +310,8 @@ statement : EXIT {
                   gen3(assign, "[]=", $1, $5.place);
                 }
                 strcat($$.code, assign);
-                gen2(gotoend, ":=", $$.after);
-                strcat($$.code, gotoend);
+                gen2(toend, ":=", $$.after);
+                strcat($$.code, toend);
                 gen2(B, ":", optionB);
                 strcat($$.code, B);
                 strcat($$.code, $7.code);
