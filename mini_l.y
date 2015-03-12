@@ -88,9 +88,37 @@ decl_list : declaration SEMICOLON {if (verbose) {printf("decl_list -> declaratio
           | declaration SEMICOLON decl_list {if (verbose) {printf("decl_list -> declaration ; decl_list\n");}}
           ;
 
-declaration : id_list COLON INTEGER {if (verbose) {printf("declaration -> id_list : integer\n");}}
+declaration : id_list COLON INTEGER {
+                
+                char declare[32];
+
+                int i = 0;
+                while(i < $1.length) {
+                  gen2(declare, ".", $1.list[i]);
+                  strcat($$.code, declare);
+                  i++;
+                }
+
+                if (verbose) {
+                  printf("declaration -> id_list : integer\n");
+                  printf("%s\n\n", $$.code);
+                }
+              }
             | id_list COLON ARRAY L_BRACKET NUMBER R_BRACKET OF INTEGER {
-                if (verbose) {printf("declaration -> id_list : array [number] of integer\n");}
+
+                char declare[32];
+
+                int i = 0;
+                while(i < $1.length) {
+                  gen3i(declare, ".[]", $1.list[i], $4);
+                  strcat($$.code, declare);
+                  i++;
+                }
+
+                if (verbose) {
+                  printf("declaration -> id_list : array [number] of integer\n");
+                  printf("%s\n\n", $$.code);
+                }
               }
             ;
 
@@ -99,6 +127,7 @@ id_list : IDENT {
             strcpy($$.list[0], $1);
             if (verbose) {
               printf("id_list -> ident\n");
+              printf("%s\n\n", $$.code);
             }
           }
         | IDENT COMMA id_list {
@@ -108,9 +137,11 @@ id_list : IDENT {
             while (i < $3.length) { 
               // doesn't matter what order they're in, could be changed
               strcpy($$.list[i], $3.list[i-1]);
+              i++;
             }
             if (verbose) {
               printf("id_list -> ident, id_list\n");
+              printf("%s\n\n", $$.code);
             }
           }
         ;
@@ -220,6 +251,7 @@ statement : EXIT {
               gen2($$.code, ":=", "ENDLABEL");
               if (verbose) {
                 printf("statement -> exit\n");}
+                printf("%s\n\n", $$.code);
               }
        // | BREAK {if (verbose) {printf("statement -> break\n");}}
        // | CONTINUE {if (verbose) {printf("statement -> continue\n");}}
@@ -341,6 +373,7 @@ statement : EXIT {
 
               if (verbose) {
                 printf("statement -> var := bool_exp ? expression : expression\n");
+                printf("%s\n\n", $$.code);
               }
             }
           | IF bool_exp THEN stmt_list ENDIF {
