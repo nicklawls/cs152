@@ -23,7 +23,7 @@ void gen2(char* buff, char* op, char* dst) {
     snprintf(buff, 64, "%s %s\n", op, dst);
 }
 
-static int tmpcount = 0;
+static int tmpcount = 1;
 
 static int labelcount = 0;
 
@@ -32,7 +32,7 @@ void newtemp(char* dst) {
     
     while(symtab_get(dst)) {
         tmpcount++;
-        sprintf(dst, "t%i",tmpcount);   
+        sprintf(dst, "t%i", tmpcount);   
     };
     ++tmpcount; // do the next one for later
     symtab_put(dst, 0); // temps are always int
