@@ -127,7 +127,6 @@ id_list : IDENT {
             strcpy($$.list[0], $1);
             if (verbose) {
               printf("id_list -> ident\n");
-              printf("%s\n\n", $$.code);
             }
           }
         | IDENT COMMA id_list {
@@ -141,7 +140,6 @@ id_list : IDENT {
             }
             if (verbose) {
               printf("id_list -> ident, id_list\n");
-              printf("%s\n\n", $$.code);
             }
           }
         ;
