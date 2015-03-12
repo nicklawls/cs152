@@ -270,7 +270,7 @@ statement : EXIT {
                 if (symtab_entry_is_int(index)) {
                   gen3(assign, "=", $1, $3.place);
                 } else {
-                  gen3(assign, "[]=". $1, $3.place); // $1 will have dst, index
+                  gen3(assign, "[]=", $1, $3.place); // $1 will have dst, index
                 }
 
                 strcat($$.code, assign);
