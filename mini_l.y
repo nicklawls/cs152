@@ -96,6 +96,7 @@ declaration : id_list COLON INTEGER {
                 while(i < $1.length) {
                   gen2(declare, ".", $1.list[i]);
                   strcat($$.code, declare);
+                  symtab_put($1.list[i], 0); // name, type int
                   i++;
                 }
 
@@ -112,6 +113,7 @@ declaration : id_list COLON INTEGER {
                 while(i < $1.length) {
                   gen3i(declare, ".[]", $1.list[i], $5);
                   strcat($$.code, declare);
+                  symtab_put($1.list[i], 1); // name, type int array
                   i++;
                 }
 
