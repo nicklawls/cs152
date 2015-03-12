@@ -64,18 +64,19 @@
 
 %%
 input : Program {
-          // iterate over symbol table and generate init statements, save into buffer
-          // concat buffer with Program.code
-          
-          char end[16];
-          gen2(end, ":", "ENDLABEL");
-          strcat($$.code, end);
-          // concat declaration of endlabel
+          // write to file
           if (verbose) {printf("input -> Program\n");}
         }
       ;
 
 Program : PROGRAM IDENT SEMICOLON block END_PROGRAM {
+          // iterate over symbol table and generate init statements, save into buffer
+          // concat buffer with Program.code
+          
+          char end[16];
+          gen2(end, ":", "ENDLABEL");
+          strcat($$.code, end); // concat declaration of endlabel
+          
             if (verbose) {printf("Program -> program ident ; block endprogram\n");}
           }
         ;
