@@ -21,9 +21,8 @@
     char begin[16];
     char code[2048];
     char after[256];
-    char continue_to[256];
-    char break_to[256];
-    char exit_to[256];
+    char continue_to[256]; // inherit test address of nearest enclosing loop
+    char break_to[256]; // inherit end of nearest enclosing loop
   } stmt; 
   struct strlist {
     char list[64][64];
@@ -67,6 +66,11 @@
 input : Program {
           // iterate over symbol table and generate init statements, save into buffer
           // concat buffer with Program.code
+          
+          char end[16];
+          gen2(end, ":", "ENDLABEL");
+          strcat($$.code, end);
+          // concat declaration of endlabel
           if (verbose) {printf("input -> Program\n");}
         }
       ;
@@ -76,7 +80,12 @@ Program : PROGRAM IDENT SEMICOLON block END_PROGRAM {
           }
         ;
 
-block : decl_list BEGIN_PROGRAM stmt_list {if (verbose) {printf("block -> decl_list beginprogram stmt_list\n");}}
+block : decl_list BEGIN_PROGRAM stmt_list {
+          
+          if (verbose) {
+            printf("block -> decl_list beginprogram stmt_list\n");
+          }
+        }
       ;
 
 decl_list : declaration SEMICOLON {if (verbose) {printf("decl_list -> declaration ;\n");}}
@@ -197,8 +206,13 @@ var_list : var {
         }
          ;
 
-statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
-          | CONTINUE {if (verbose) {printf("statement -> continue\n");}}
+statement : EXIT {
+              gen2($$.code, ":=", "ENDLABEL");
+              if (verbose) {
+                printf("statement -> exit\n");}
+              }
+       // | BREAK {if (verbose) {printf("statement -> break\n");}}
+       // | CONTINUE {if (verbose) {printf("statement -> continue\n");}}
           | READ var_list {if (verbose) {printf("statement -> read var_list\n");}}
           | WRITE var_list {if (verbose) {printf("statement -> write var_list\n");}}
           | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
@@ -244,9 +258,78 @@ statement : EXIT {if (verbose) {printf("statement -> exit\n");}}
                 printf("%s\n\n", $$.code);
               }
             }
-          | var ASSIGN expression {if (verbose) {printf("statement -> var := expression\n");}}
+          | var ASSIGN expression {
+              int index = symtab_get($1);
+              strcat($$.code, $3.code);
+              // handle both the int and array cases
+
+              if (index) {
+                char assign[64];
+                
+                if (symtab_entry_is_int(index)) {
+                  gen3(assign, "=", $1, $3.place);
+                } else {
+                  gen3(assign, "[]=". $1, $3.place); // $1 will have dst, index
+                }
+
+                strcat($$.code, assign);
+
+              } else {
+                yyerror("attempted to retrieve a symbol not in table\n");
+              }
+
+              if (verbose) {
+                printf("statement -> var := expression\n");
+                printf("%s\n\n", $$.code);
+
+              }
+            }
           | var ASSIGN bool_exp QUESTION expression COLON expression {
-                if (verbose) {printf("statement -> var := bool_exp ? expression : expression\n");}
+              
+              int index = symtab_get($1);
+              strcat($$.code, $3.code);
+
+              if (index ) {
+                char optionA[8], optionB[8], assign[32];
+                newlabel(optionA);
+                newlabel(optionB);
+                newlabel($$.after);                
+                strcat($$.code, $3.code, ); // compute expr
+                char ifthen[32], elsethen[32], toend[32], A[8], B[8] end[32];  
+                gen3(ifthen, "?:=", optionA, $3.place);
+                strcat($$.code, ifthen);
+                gen2(elsethen, ":=", optionB);
+                strcat($$.code, elsethen);
+                gen2(A, ":", optionA)
+                strcat($$.code, A);
+                strcat($$.code, $5.code);
+                if(symtab_entry_is_int(index)) {
+                  gen3(assign, "=", $1, $5.place);
+                } else {
+                  gen3(assign, "[]=", $1, $5.place);
+                }
+                strcat($$.code, assign);
+                gen2(gotoend, ":=", $$.after);
+                strcat($$.code, gotoend);
+                gen2(B, ":", optionB);
+                strcat($$.code, B);
+                strcat($$.code, $7.code);
+                if(symtab_entry_is_int(index)) {
+                  gen3(assign, "=", $1, $7.place);
+                } else {
+                  gen3(assign, "[]=", $1, $7.place);
+                }
+                strcat($$.code, assign);
+                gen2(end, ":", $$.after);
+                strcat($$.code, end);
+
+              } else {
+                yyerror("attempted to retrieve a symbol not in table\n");
+              }
+
+              if (verbose) {
+                printf("statement -> var := bool_exp ? expression : expression\n");
+              }
             }
           | IF bool_exp THEN stmt_list ENDIF {
               newlabel($$.begin);
