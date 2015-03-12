@@ -31,7 +31,6 @@
 
 }
 
-
 %error-verbose
 %start input
 %token <intval> NUMBER
@@ -48,8 +47,6 @@
 %left DIV
 %left MOD
 
-
-
 %type <expr> expression
 %type <expr> term termA
 %type <expr> m_exp relation_exp relation_expA
@@ -59,8 +56,6 @@
 %type <stmt> statement stmt_list decl_list elif_list
 %type <stmt> block  
 %type <stmt> Program declaration
-
-
 
 %%
 input : Program {
@@ -100,7 +95,8 @@ declaration : id_list COLON INTEGER {if (verbose) {printf("declaration -> id_lis
             ;
 
 id_list : IDENT {
-
+            $$.length = 1;
+            strcpy($$.list[1], $$);
             if (verbose) {printf("id_list -> ident\n");}
           }
         | IDENT COMMA id_list {if (verbose) {printf("id_list -> ident, id_list\n");}}
@@ -262,23 +258,17 @@ statement : EXIT {
           | var ASSIGN expression {
               int index = symtab_get($1);
               strcat($$.code, $3.code);
-              // handle both the int and array cases
-
               if (index) {
                 char assign[64];
-                
                 if (symtab_entry_is_int(index)) {
                   gen3(assign, "=", $1, $3.place);
                 } else {
                   gen3(assign, "[]=", $1, $3.place); // $1 will have dst, index
                 }
-
                 strcat($$.code, assign);
-
               } else {
                 yyerror("attempted to retrieve a symbol not in table\n");
               }
-
               if (verbose) {
                 printf("statement -> var := expression\n");
                 printf("%s\n\n", $$.code);
