@@ -96,8 +96,10 @@ declaration : id_list COLON INTEGER {if (verbose) {printf("declaration -> id_lis
 
 id_list : IDENT {
             $$.length = 1;
-            strcpy($$.list[1], $$);
-            if (verbose) {printf("id_list -> ident\n");}
+            strcpy($$.list[0], $1);
+            if (verbose) {
+              printf("id_list -> ident\n");
+            }
           }
         | IDENT COMMA id_list {if (verbose) {printf("id_list -> ident, id_list\n");}}
         ;
