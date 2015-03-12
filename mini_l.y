@@ -101,7 +101,18 @@ id_list : IDENT {
               printf("id_list -> ident\n");
             }
           }
-        | IDENT COMMA id_list {if (verbose) {printf("id_list -> ident, id_list\n");}}
+        | IDENT COMMA id_list {
+            $$.length = $3.length + 1;
+            strcpy($$.list[0], $1);
+            int i = 1;
+            while (i < $3.length) { 
+              // doesn't matter what order they're in, could be changed
+              strcpy($$.list[i], $3.list[i-1]);
+            }
+            if (verbose) {
+              printf("id_list -> ident, id_list\n");
+            }
+          }
         ;
 
 elif_list : ELSEIF bool_exp stmt_list {
@@ -212,8 +223,16 @@ statement : EXIT {
               }
        // | BREAK {if (verbose) {printf("statement -> break\n");}}
        // | CONTINUE {if (verbose) {printf("statement -> continue\n");}}
-          | READ var_list {if (verbose) {printf("statement -> read var_list\n");}}
-          | WRITE var_list {if (verbose) {printf("statement -> write var_list\n");}}
+          | READ var_list {
+              if (verbose) {
+                printf("statement -> read var_list\n");
+              }
+            }
+          | WRITE var_list {
+              if (verbose) {
+                printf("statement -> write var_list\n");
+              }
+            }
           | DO BEGINLOOP stmt_list ENDLOOP WHILE bool_exp {
               newlabel($$.begin);
               newlabel($$.after);
