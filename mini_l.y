@@ -110,7 +110,7 @@ declaration : id_list COLON INTEGER {
 
                 int i = 0;
                 while(i < $1.length) {
-                  gen3i(declare, ".[]", $1.list[i], $4);
+                  gen3i(declare, ".[]", $1.list[i], $5);
                   strcat($$.code, declare);
                   i++;
                 }
